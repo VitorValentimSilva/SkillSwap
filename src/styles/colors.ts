@@ -1,0 +1,16 @@
+export const colors = {
+  BackgroundLightTheme: "#F5F7FA",
+  BackgroundDarkTheme: "#181F2B",
+  PrimaryColorLightTheme: "#2F80ED",
+  PrimaryColorDarkTheme: "#56CCF2",
+  SecondaryColorLightTheme: "#27AE60",
+  SecondaryColorDarkTheme: "#6FCF97",
+  TextPrimaryColorLightTheme: "#333333",
+  TextPrimaryColorDarkTheme: "#E5E5E5",
+  TextSecondaryColorLightTheme: "#4F4F4F",
+  TextSecondaryColorDarkTheme: "#B3B3B3",
+  AccentColor: "#F2C94C",
+  ErrorColor: "#EB5757",
+  SurfaceColorLightTheme: "#FFFFFF",
+  SurfaceColorDarkTheme: "#212B3A",
+};
