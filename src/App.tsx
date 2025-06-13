@@ -1,7 +1,12 @@
 import "./styles/global.css";
 import "../gesture-handler";
 import Routes from "./routes";
+import { AuthProvider } from "./contexts/AuthContext";
 
 export default function App() {
-  return <Routes />;
+  return (
+    <AuthProvider>
+      <Routes />
+    </AuthProvider>
+  );
 }
