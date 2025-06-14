@@ -9,7 +9,7 @@ export default function Header() {
 
   return (
     <View
-      className={`pt-10 flex-row justify-between items-center px-4 py-3 
+      className={`pt-10 flex-row justify-between items-center px-5 py-3 
     ${isDark ? "bg-BackgroundDarkTheme" : "bg-BackgroundLightTheme"}`}
     >
       <Text
