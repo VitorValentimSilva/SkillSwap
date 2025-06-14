@@ -11,6 +11,6 @@ export const colors = {
   TextSecondaryColorDarkTheme: "#B3B3B3",
   AccentColor: "#F2C94C",
   ErrorColor: "#EB5757",
-  SurfaceColorLightTheme: "#FFFFFF",
-  SurfaceColorDarkTheme: "#212B3A",
+  SurfaceColorLightTheme: "#e3e1e1",
+  SurfaceColorDarkTheme: "#29364a",
 };
