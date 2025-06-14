@@ -5,6 +5,7 @@ import { Feather } from "@expo/vector-icons";
 import Home from "../screens/Home";
 import { colors } from "../styles/colors";
 import { ThemeContext } from "../contexts/ThemeContext";
+import Profile from "../screens/Profile";
 
 const Tab = createBottomTabNavigator();
 
@@ -45,6 +46,25 @@ export default function TabRoutes() {
           tabBarIcon: () => (
             <Feather
               name="home"
+              size={22}
+              color={
+                isDark
+                  ? colors.PrimaryColorDarkTheme
+                  : colors.PrimaryColorLightTheme
+              }
+            />
+          ),
+        }}
+      />
+
+      <Tab.Screen
+        name="Perfil"
+        component={Profile}
+        options={{
+          headerShown: false,
+          tabBarIcon: () => (
+            <Feather
+              name="user"
               size={22}
               color={
                 isDark
