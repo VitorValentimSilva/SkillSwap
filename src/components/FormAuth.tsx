@@ -1,8 +1,10 @@
-import { View, Button } from "react-native";
+import { View, Button, Pressable, Text } from "react-native";
 import { useForm, FormProvider } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Input from "./Input";
+import { useContext } from "react";
+import { ThemeContext } from "../contexts/ThemeContext";
 
 type Props = {
   isSignUp: boolean;
@@ -32,6 +34,7 @@ const signupSchema = z
   });
 
 export default function FormAuth({ isSignUp, onSubmit, onSwitchMode }: Props) {
+  const { isDark } = useContext(ThemeContext);
   const schema = isSignUp ? signupSchema : loginSchema;
   type FormValues = z.infer<typeof schema>;
 
@@ -46,10 +49,13 @@ export default function FormAuth({ isSignUp, onSubmit, onSwitchMode }: Props) {
 
   return (
     <FormProvider {...methods}>
-      <View className="p-5 space-y-4 bg-white rounded-2xl w-full">
+      <View
+        className={`p-5 space-y-4 rounded-2xl w-full
+        ${isDark ? "bg-SurfaceColorDarkTheme" : "bg-SurfaceColorLightTheme"}`}
+      >
         <Input
           name="email"
-          label="E‑mail"
+          label="E-mail"
           placeholder="seu@email.com"
           keyboardType="email-address"
           autoCapitalize="none"
@@ -75,16 +81,31 @@ export default function FormAuth({ isSignUp, onSubmit, onSwitchMode }: Props) {
         )}
 
         <View className="mt-4 gap-6">
-          <Button
-            title={isSignUp ? "Criar Conta" : "Entrar"}
+          <Pressable
             onPress={handleSubmit(onSubmit)}
-          />
+            className={`p-3 rounded-md 
+              ${isDark ? "bg-PrimaryColorLightTheme" : "bg-PrimaryColorDarkTheme"}`}
+          >
+            <Text
+              className={`text-center font-semibold
+              ${isDark ? "text-TextPrimaryColorDarkTheme" : "text-TextPrimaryColorLightTheme"}`}
+            >
+              {isSignUp ? "Criar Conta" : "Entrar"}
+            </Text>
+          </Pressable>
 
-          <Button
-            title={isSignUp ? "Já tem conta? Faça login" : "Criar nova conta"}
+          <Pressable
             onPress={onSwitchMode}
-            color="gray"
-          />
+            className={`p-3 rounded-md
+              ${isDark ? "bg-TextSecondaryColorLightTheme" : "bg-TextSecondaryColorDarkTheme"}`}
+          >
+            <Text
+              className={`text-center font-semibold
+              ${isDark ? "text-TextPrimaryColorDarkTheme" : "text-TextPrimaryColorLightTheme"}`}
+            >
+              {isSignUp ? "Já tem conta? Faça login" : "Criar nova conta"}
+            </Text>
+          </Pressable>
         </View>
       </View>
     </FormProvider>

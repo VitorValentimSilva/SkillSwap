@@ -5,6 +5,9 @@ import {
   TextInputProps,
 } from "react-native";
 import { useFormContext, useController } from "react-hook-form";
+import { ThemeContext } from "../contexts/ThemeContext";
+import { useContext } from "react";
+import { colors } from "../styles/colors";
 
 type Props = {
   name: string;
@@ -12,6 +15,7 @@ type Props = {
 } & TextInputProps;
 
 export default function Input({ name, label, ...props }: Props) {
+  const { isDark } = useContext(ThemeContext);
   const { control, setValue } = useFormContext();
   const {
     field: { value, onChange, onBlur },
@@ -35,21 +39,34 @@ export default function Input({ name, label, ...props }: Props) {
 
   return (
     <View className="mb-4">
-      {label && <Text className="text-base font-semibold mb-1">{label}</Text>}
+      {label && (
+        <Text
+          className={`text-base font-semibold mb-1 
+          ${isDark ? "text-TextPrimaryColorDarkTheme" : "text-TextPrimaryColorLightTheme"}`}
+        >
+          {label}
+        </Text>
+      )}
 
       <RNTextInput
-        className="border border-gray-300 rounded px-3 py-2"
+        className={`border rounded-md px-3 py-2
+          ${isDark ? "border-TextPrimaryColorDarkTheme text-TextPrimaryColorDarkTheme" : "border-TextPrimaryColorLightTheme text-TextPrimaryColorLightTheme"}`}
         value={value}
         onChangeText={handleChangeText}
         onBlur={onBlur}
         maxLength={name === "data" ? 10 : undefined}
         keyboardType={name === "valor" ? "decimal-pad" : props.keyboardType}
         placeholder={props.placeholder}
+        placeholderTextColor={
+          isDark
+            ? colors.TextPrimaryColorDarkTheme
+            : colors.TextPrimaryColorLightTheme
+        }
         {...props}
       />
 
       {error && (
-        <Text className="text-red-500 text-base mt-1">{error.message}</Text>
+        <Text className="text-ErrorColor text-base mt-1">{error.message}</Text>
       )}
     </View>
   );
