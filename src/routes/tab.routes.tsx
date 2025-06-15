@@ -1,11 +1,12 @@
 import React, { useContext } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Feather } from "@expo/vector-icons";
+import { Feather, Ionicons } from "@expo/vector-icons";
 
 import Home from "../screens/Home";
 import { colors } from "../styles/colors";
 import { ThemeContext } from "../contexts/ThemeContext";
 import Profile from "../screens/Profile";
+import TeachSkill from "../screens/TeachSkill";
 
 const Tab = createBottomTabNavigator();
 
@@ -46,6 +47,25 @@ export default function TabRoutes() {
           tabBarIcon: () => (
             <Feather
               name="home"
+              size={22}
+              color={
+                isDark
+                  ? colors.PrimaryColorDarkTheme
+                  : colors.PrimaryColorLightTheme
+              }
+            />
+          ),
+        }}
+      />
+
+      <Tab.Screen
+        name="Ensine"
+        component={TeachSkill}
+        options={{
+          headerShown: false,
+          tabBarIcon: () => (
+            <Ionicons
+              name="school-outline"
               size={22}
               color={
                 isDark

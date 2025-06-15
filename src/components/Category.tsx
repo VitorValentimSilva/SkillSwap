@@ -1,6 +1,5 @@
-// Category.tsx
 import React, { useContext } from "react";
-import { View, Text } from "react-native";
+import { View, Text, Pressable } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { ThemeContext } from "../contexts/ThemeContext";
 
@@ -20,7 +19,7 @@ export default function Category({
   const { isDark } = useContext(ThemeContext);
 
   return (
-    <View className={`w-1/3 aspect-square p-3`}>
+    <Pressable className="w-1/3 aspect-square p-3">
       <View
         className={`
           flex-1
@@ -43,6 +42,6 @@ export default function Category({
           {name}
         </Text>
       </View>
-    </View>
+    </Pressable>
   );
 }

@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { View, Alert } from "react-native";
-import FormAuth from "../components/FormAuth";
+import FormAuth from "../components/Form/FormAuth";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { useAuth } from "../contexts/AuthContext";
 import { ThemeContext } from "../contexts/ThemeContext";

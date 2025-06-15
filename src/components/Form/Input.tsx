@@ -5,9 +5,9 @@ import {
   TextInputProps,
 } from "react-native";
 import { useFormContext, useController } from "react-hook-form";
-import { ThemeContext } from "../contexts/ThemeContext";
+import { ThemeContext } from "../../contexts/ThemeContext";
 import { useContext } from "react";
-import { colors } from "../styles/colors";
+import { colors } from "../../styles/colors";
 
 type Props = {
   name: string;

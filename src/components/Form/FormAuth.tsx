@@ -1,10 +1,10 @@
-import { View, Button, Pressable, Text } from "react-native";
+import { View, Pressable, Text } from "react-native";
 import { useForm, FormProvider } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Input from "./Input";
 import { useContext } from "react";
-import { ThemeContext } from "../contexts/ThemeContext";
+import { ThemeContext } from "../../contexts/ThemeContext";
 
 type Props = {
   isSignUp: boolean;
@@ -17,7 +17,7 @@ type Props = {
 };
 
 const baseSchema = {
-  email: z.string().email({ message: "E‑mail inválido" }),
+  email: z.string().email({ message: "E-mail inválido" }),
   password: z.string().min(6, { message: "Mínimo de 6 caracteres" }),
 };
 
