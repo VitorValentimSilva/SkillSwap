@@ -1,9 +1,4 @@
-import React, {
-  createContext,
-  ReactNode,
-  useContext,
-  useState,
-} from "react";
+import React, { createContext, ReactNode, useContext, useState } from "react";
 import { db } from "../services/firebaseConfig";
 import { doc, getDoc } from "firebase/firestore";
 import { createProfile } from "../services/profileService";
@@ -25,7 +20,6 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
   const { user } = useAuth();
 
   const checkProfile = async (uid: string) => {
-    console.log("Verificando perfil para o usuário:", uid);
     if (!uid) {
       setHasProfile(false);
       return false;
@@ -33,9 +27,8 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
     try {
       const ref = doc(db, "profiles", uid);
       const snap = await getDoc(ref);
-      console;
       const exists = snap.exists();
-      console.log("Perfil encontrado:", exists);
+
       setHasProfile(exists);
       return exists;
     } catch (error) {

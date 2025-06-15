@@ -16,7 +16,7 @@ export const CreateAccount = ({ navigation }: Props) => {
   const handleSubmit = async (values: { email: string; password: string }) => {
     try {
       await signUp(values.email, values.password);
-      navigation.navigate("Home");
+      navigation.navigate("CreateProfile");
     } catch (error: any) {
       Alert.alert("Erro no cadastro", error.message);
     }

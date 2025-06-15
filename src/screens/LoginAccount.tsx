@@ -19,8 +19,7 @@ export const LoginAccount = ({ navigation }: Props) => {
     try {
       const user = await signIn(values.email, values.password);
       const hasProfile = await checkProfile(user.uid);
-      console.log("Perfil encontrado:", hasProfile);
-      console.log("Usuário logado:", user.uid);
+
       if (hasProfile) {
         navigation.navigate("Home");
       } else {

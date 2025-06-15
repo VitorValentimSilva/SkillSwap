@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import { ThemeContext } from "../../contexts/ThemeContext";
 import { FormProvider, useForm } from "react-hook-form";
-import { Button, Image, Text, View } from "react-native";
+import { Button, Image, Pressable, Text, View } from "react-native";
 import Input from "./Input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ProfileFormData, profileSchema } from "../../schemas/profileSchema";
@@ -51,9 +51,13 @@ export default function FormProfile() {
   return (
     <FormProvider {...methods}>
       <View
-        className={`p-5 ${isDark ? "bg-BackgroundDarkTheme" : "bg-BackgroundLightTheme"}`}
+        className={`w-full gap-2 ${isDark ? "bg-BackgroundDarkTheme" : "bg-BackgroundLightTheme"}`}
       >
-        <Text className="font-semibold mb-2">Foto de Perfil</Text>
+        <Text
+          className={`font-semibold mb-2 ${isDark ? "text-TextPrimaryColorDarkTheme" : "text-TextPrimaryColorLightTheme"}`}
+        >
+          Foto de Perfil
+        </Text>
         <View className="mb-4">
           {photoUri ? (
             <Image
@@ -61,7 +65,24 @@ export default function FormProfile() {
               style={{ width: 120, height: 120, borderRadius: 60 }}
             />
           ) : (
-            <Button title="Escolher foto" onPress={handlePickPhoto} />
+            <Pressable
+              onPress={handlePickPhoto}
+              className={`p-3 rounded-md ${
+                isDark
+                  ? "bg-PrimaryColorLightTheme"
+                  : "bg-PrimaryColorDarkTheme"
+              }`}
+            >
+              <Text
+                className={`font-semibold ${
+                  isDark
+                    ? "text-TextPrimaryColorDarkTheme"
+                    : "text-TextPrimaryColorLightTheme"
+                }`}
+              >
+                Escolher foto
+              </Text>
+            </Pressable>
           )}
           {errors.photo && (
             <Text className="text-ErrorColor mt-1">{errors.photo.message}</Text>
@@ -90,14 +111,21 @@ export default function FormProfile() {
           label="Bio *"
           placeholder="Fale um pouco sobre você"
           multiline
-          numberOfLines={3}
+          numberOfLines={5}
         />
 
-        <Button
-          title={isSubmitting ? "Enviando..." : "Salvar Perfil"}
+        <Pressable
           onPress={handleSubmit(onSubmit)}
-          disabled={isSubmitting}
-        />
+          className={`p-3 rounded-md
+                      ${isDark ? "bg-PrimaryColorLightTheme" : "bg-PrimaryColorDarkTheme"}`}
+        >
+          <Text
+            className={`text-center font-semibold
+            ${isDark ? "text-TextPrimaryColorDarkTheme" : "text-TextPrimaryColorLightTheme"}`}
+          >
+            {isSubmitting ? "Enviando..." : "Salvar Perfil"}
+          </Text>
+        </Pressable>
       </View>
     </FormProvider>
   );
