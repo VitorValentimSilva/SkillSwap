@@ -5,13 +5,15 @@ import { Image, Pressable, Text, View } from "react-native";
 import Input from "./Input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ProfileFormData, profileSchema } from "../../schemas/profileSchema";
-import { useProfile } from "../../contexts/ProfileContext";
 import { pickImage } from "../../utils/pickImage";
 import { PhoneNumberInput } from "./PhoneNumberInput";
 
-export default function FormProfile() {
+type Props = {
+  onSubmit: (data: ProfileFormData) => Promise<void>;
+};
+
+export default function FormProfile({ onSubmit }: Props) {
   const { isDark } = useContext(ThemeContext);
-  const { submitProfile, isSubmitting } = useProfile();
   const [photoUri, setPhotoUri] = useState<string>("");
 
   const methods = useForm<ProfileFormData>({
@@ -32,15 +34,6 @@ export default function FormProfile() {
     setValue,
     formState: { errors },
   } = methods;
-
-  const onSubmit = async (data: ProfileFormData) => {
-    try {
-      const id = await submitProfile(data);
-      console.log("Perfil criado com ID:", id);
-    } catch (err) {
-      console.error(err);
-    }
-  };
 
   const handlePickPhoto = async () => {
     const uri = await pickImage();
@@ -124,7 +117,7 @@ export default function FormProfile() {
             className={`text-center font-semibold
             ${isDark ? "text-TextPrimaryColorDarkTheme" : "text-TextPrimaryColorLightTheme"}`}
           >
-            {isSubmitting ? "Enviando..." : "Salvar Perfil"}
+            {methods.formState.isSubmitting ? "Enviando..." : "Salvar Perfil"}
           </Text>
         </Pressable>
       </View>

@@ -2,7 +2,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import TabRoutes from "./tab.routes";
 import { CreateAccount } from "../screens/CreateAccount";
 import { LoginAccount } from "../screens/LoginAccount";
-import CreateProfile from "../screens/CreateProfile";
+import { CreateProfile } from "../screens/CreateProfile";
 
 const Stack = createStackNavigator();
 
@@ -11,7 +11,6 @@ export default function StackRoutes() {
     <Stack.Navigator
       screenOptions={{
         headerShown: false,
-        cardStyle: { backgroundColor: "#FFFFFF" },
       }}
     >
       <Stack.Screen name="CreateAccount" component={CreateAccount} />
