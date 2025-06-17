@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import { ThemeContext } from "../../contexts/ThemeContext";
 import { FormProvider, useForm } from "react-hook-form";
-import { Button, Image, Pressable, Text, View } from "react-native";
+import { Image, Pressable, Text, View } from "react-native";
 import Input from "./Input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ProfileFormData, profileSchema } from "../../schemas/profileSchema";
@@ -20,6 +20,7 @@ export default function FormProfile() {
       photo: "",
       fullName: "",
       phone: "",
+      address: "",
       city: "",
       country: "",
       bio: "",
@@ -99,6 +100,8 @@ export default function FormProfile() {
         />
 
         <PhoneNumberInput name="phone" label="Telefone *" />
+
+        <Input name="address" label="Endereço *" placeholder="Seu endereço" />
 
         <Input name="city" label="Cidade *" placeholder="Sua cidade" />
 
