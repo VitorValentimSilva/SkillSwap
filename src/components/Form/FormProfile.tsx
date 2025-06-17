@@ -7,6 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ProfileFormData, profileSchema } from "../../schemas/profileSchema";
 import { useProfile } from "../../contexts/ProfileContext";
 import { pickImage } from "../../utils/pickImage";
+import { PhoneNumberInput } from "./PhoneNumberInput";
 
 export default function FormProfile() {
   const { isDark } = useContext(ThemeContext);
@@ -60,10 +61,12 @@ export default function FormProfile() {
         </Text>
         <View className="mb-4">
           {photoUri ? (
-            <Image
-              source={{ uri: photoUri }}
-              style={{ width: 120, height: 120, borderRadius: 60 }}
-            />
+            <Pressable onPress={handlePickPhoto}>
+              <Image
+                source={{ uri: photoUri }}
+                style={{ width: 120, height: 120, borderRadius: 60 }}
+              />
+            </Pressable>
           ) : (
             <Pressable
               onPress={handlePickPhoto}
@@ -95,12 +98,7 @@ export default function FormProfile() {
           placeholder="Digite seu nome"
         />
 
-        <Input
-          name="phone"
-          label="Telefone *"
-          keyboardType="phone-pad"
-          placeholder="+55 (__) _____-____"
-        />
+        <PhoneNumberInput name="phone" label="Telefone *" />
 
         <Input name="city" label="Cidade *" placeholder="Sua cidade" />
 

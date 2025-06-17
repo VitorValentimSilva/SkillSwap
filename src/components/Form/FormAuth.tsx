@@ -5,6 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Input from "./Input";
 import { useContext } from "react";
 import { ThemeContext } from "../../contexts/ThemeContext";
+import { loginSchema, signupSchema } from "../../schemas/authSchema";
 
 type Props = {
   isSignUp: boolean;
@@ -15,23 +16,6 @@ type Props = {
   }) => void;
   onSwitchMode: () => void;
 };
-
-const baseSchema = {
-  email: z.string().email({ message: "E-mail inválido" }),
-  password: z.string().min(6, { message: "Mínimo de 6 caracteres" }),
-};
-
-const loginSchema = z.object(baseSchema);
-
-const signupSchema = z
-  .object({
-    ...baseSchema,
-    confirmPassword: z.string(),
-  })
-  .refine((data) => data.confirmPassword === data.password, {
-    path: ["confirmPassword"],
-    message: "Senhas devem ser iguais",
-  });
 
 export default function FormAuth({ isSignUp, onSubmit, onSwitchMode }: Props) {
   const { isDark } = useContext(ThemeContext);
