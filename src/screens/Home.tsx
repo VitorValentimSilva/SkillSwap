@@ -4,9 +4,13 @@ import { useContext } from "react";
 import { ThemeContext } from "../contexts/ThemeContext";
 import HomeButtonComponent from "../components/HomeButtonComponent";
 import CategoryComponent from "../components/CategoryComponent";
+import { useNavigation } from "@react-navigation/native";
+import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
+import { TabParamList } from "../types/tabParamList";
 
 export default function Home() {
   const { isDark } = useContext(ThemeContext);
+  const navigation = useNavigation<BottomTabNavigationProp<TabParamList>>();
 
   return (
     <SafeAreaView
@@ -23,7 +27,7 @@ export default function Home() {
         />
         <HomeButtonComponent
           mode="teach"
-          onPress={() => console.log("Teach pressed")}
+          onPress={() => navigation.navigate("Ensine")}
         />
       </View>
 

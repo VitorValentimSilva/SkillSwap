@@ -16,7 +16,7 @@ type Props = {
 
 export default function Input({ name, label, ...props }: Props) {
   const { isDark } = useContext(ThemeContext);
-  const { control, setValue } = useFormContext();
+  const { control, setValue, trigger } = useFormContext();
   const {
     field: { value, onChange, onBlur },
     fieldState: { error },
@@ -34,6 +34,7 @@ export default function Input({ name, label, ...props }: Props) {
       setValue(name, formatted);
     } else {
       onChange(text);
+      trigger(name);
     }
   };
 
