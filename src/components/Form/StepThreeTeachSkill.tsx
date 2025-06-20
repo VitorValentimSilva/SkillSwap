@@ -1,7 +1,8 @@
-import React, { useContext } from "react";
-import { View, Text, TouchableOpacity } from "react-native";
-import { ThemeContext } from "../../contexts/ThemeContext";
+import React from "react";
+import { View } from "react-native";
 import Input from "./Input";
+import VideoInput from "./VideoInput";
+import AppButton from "./AppButton";
 
 export interface StepThreeTeachSkillProps {
   onNext: () => void;
@@ -12,8 +13,6 @@ export default function StepThreeTeachSkill({
   onNext,
   onBack,
 }: StepThreeTeachSkillProps) {
-  const { isDark } = useContext(ThemeContext);
-
   return (
     <View>
       <Input
@@ -24,33 +23,20 @@ export default function StepThreeTeachSkill({
         numberOfLines={4}
       />
 
-      <View className="flex-row justify-between">
-        <TouchableOpacity
-          onPress={onBack}
-          className={`px-10 py-3 rounded-md
-          ${isDark ? "bg-TextSecondaryColorLightTheme" : "bg-TextSecondaryColorDarkTheme"}`}
-        >
-          <Text
-            className={`text-center font-semibold
-            ${isDark ? "text-TextPrimaryColorDarkTheme" : "text-TextPrimaryColorLightTheme"}`}
-          >
-            Voltar
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
+      <VideoInput
+        name="videoUrl"
+        label="Vídeo de Introdução"
+        maxDurationSec={180}
+      />
+
+      <View className="flex-row justify-between mt-4">
+        <AppButton label="Voltar" onPress={onBack} type="secondary" />
+        <AppButton
+          label="Enviar"
           onPress={async () => {
             onNext();
           }}
-          className={`px-10 py-3 rounded-md
-          ${isDark ? "bg-PrimaryColorLightTheme" : "bg-PrimaryColorDarkTheme"}`}
-        >
-          <Text
-            className={`text-center font-semibold
-            ${isDark ? "text-TextPrimaryColorDarkTheme" : "text-TextPrimaryColorLightTheme"}`}
-          >
-            Avançar
-          </Text>
-        </TouchableOpacity>
+        />
       </View>
     </View>
   );

@@ -24,6 +24,8 @@ export default function FormTeachSkill() {
       title: "",
       category: "",
       level: "",
+      method: "",
+      maxStudents: "",
       description: "",
       packages: "",
       daysAvailable: [],

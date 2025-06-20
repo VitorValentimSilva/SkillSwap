@@ -9,6 +9,8 @@ export const teachSkillSchema = z.object({
     .max(80, "Título de habilidade muito longo"),
   category: z.string().nonempty("Categoria é obrigatória"),
   level: z.string().nonempty("Nível de experiência é obrigatório"),
+  method: z.string().nonempty("Método de ensino é obrigatório"),
+  maxStudents: z.coerce.string().optional(),
   description: z
     .string()
     .nonempty("Descrição é obrigatória")

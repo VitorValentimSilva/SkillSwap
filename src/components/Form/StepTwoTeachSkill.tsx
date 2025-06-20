@@ -6,6 +6,7 @@ import { TeachSkillFormData } from "../../schemas/teachSkillSchema";
 import { ThemeContext } from "../../contexts/ThemeContext";
 import { Ionicons } from "@expo/vector-icons";
 import { colors } from "../../styles/colors";
+import AppButton from "./AppButton";
 
 const daysOfWeek = [
   "Domingo",
@@ -126,33 +127,14 @@ export default function StepTwoTeachSkill({
       </View>
 
       <View className="flex-row justify-between">
-        <TouchableOpacity
-          onPress={onBack}
-          className={`px-10 py-3 rounded-md
-          ${isDark ? "bg-TextSecondaryColorLightTheme" : "bg-TextSecondaryColorDarkTheme"}`}
-        >
-          <Text
-            className={`text-center font-semibold
-            ${isDark ? "text-TextPrimaryColorDarkTheme" : "text-TextPrimaryColorLightTheme"}`}
-          >
-            Voltar
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
+        <AppButton label="Voltar" onPress={onBack} type="secondary" />
+        <AppButton
+          label="Avançar"
           onPress={async () => {
             const valid = await trigger(["hourlyRate", "daysAvailable"]);
             if (valid) onNext();
           }}
-          className={`px-10 py-3 rounded-md
-          ${isDark ? "bg-PrimaryColorLightTheme" : "bg-PrimaryColorDarkTheme"}`}
-        >
-          <Text
-            className={`text-center font-semibold
-            ${isDark ? "text-TextPrimaryColorDarkTheme" : "text-TextPrimaryColorLightTheme"}`}
-          >
-            Avançar
-          </Text>
-        </TouchableOpacity>
+        />
       </View>
     </View>
   );

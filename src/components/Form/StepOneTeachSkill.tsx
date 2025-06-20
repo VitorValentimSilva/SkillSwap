@@ -1,27 +1,37 @@
-import React, { useContext } from "react";
-import { View, Text, Pressable } from "react-native";
+import React from "react";
+import { View } from "react-native";
 import { useFormContext } from "react-hook-form";
 import Input from "./Input";
 import { TeachSkillFormData } from "../../schemas/teachSkillSchema";
-import { Picker } from "@react-native-picker/picker";
-import { ThemeContext } from "../../contexts/ThemeContext";
-import { colors } from "../../styles/colors";
+import AppButton from "./AppButton";
+import SelectInput, { Option } from "./SelectInput";
 
 export interface StepOneTeachSkillProps {
   onNext: () => void;
 }
 
 export default function StepOneTeachSkill({ onNext }: StepOneTeachSkillProps) {
-  const {
-    watch,
-    setValue,
-    trigger,
-    formState: { errors },
-  } = useFormContext<TeachSkillFormData>();
-  const { isDark } = useContext(ThemeContext);
+  const { trigger } = useFormContext<TeachSkillFormData>();
 
-  const selectedCategory = watch("category");
-  const selectedLevel = watch("level");
+  const categoryOptions: Option[] = [
+    { label: "Música", value: "Música" },
+    { label: "Programação", value: "Programação" },
+    { label: "Arte", value: "Arte" },
+    { label: "Culinária", value: "Culinária" },
+    { label: "Fotografia", value: "Fotografia" },
+    { label: "Idiomas", value: "Idiomas" },
+  ];
+  const levelOptions: Option[] = [
+    { label: "Iniciante", value: "Iniciante" },
+    { label: "Intermediário", value: "Intermediário" },
+    { label: "Avançado", value: "Avançado" },
+    { label: "Especialista", value: "Especialista" },
+  ];
+  const methodOptions: Option[] = [
+    { label: "Individuais", value: "Individuais" },
+    { label: "Aulas em Grupo", value: "Aulas em Grupo" },
+    { label: "Cursos Online", value: "Cursos Online" },
+  ];
 
   return (
     <View>
@@ -31,81 +41,31 @@ export default function StepOneTeachSkill({ onNext }: StepOneTeachSkillProps) {
         placeholder="Ex: Aulas de violão para iniciantes"
       />
 
-      <Text
-        className={`text-base font-semibold mb-1 
-        ${isDark ? "text-TextPrimaryColorDarkTheme" : "text-TextPrimaryColorLightTheme"}`}
-      >
-        Categoria *
-      </Text>
-      <View
-        className={`border rounded-md h-10 justify-center mb-2
-        ${isDark ? "border-TextPrimaryColorDarkTheme" : "border-TextPrimaryColorLightTheme"}`}
-      >
-        <Picker<string>
-          selectedValue={selectedCategory}
-          onValueChange={(value) => {
-            setValue("category", value);
-            trigger("category");
-          }}
-          style={{
-            color: isDark
-              ? colors.TextPrimaryColorDarkTheme
-              : colors.TextPrimaryColorLightTheme,
-          }}
-          dropdownIconColor={
-            isDark
-              ? colors.TextPrimaryColorDarkTheme
-              : colors.TextPrimaryColorLightTheme
-          }
-        >
-          <Picker.Item label="Selecione..." value="" />
-          <Picker.Item label="Música" value="music" />
-          <Picker.Item label="Arte" value="art" />
-          <Picker.Item label="Esportes" value="sports" />
-        </Picker>
-      </View>
+      <SelectInput
+        name="category"
+        label="Categoria *"
+        options={categoryOptions}
+      />
 
-      {errors.category && (
-        <Text className="text-ErrorColor mb-4">{errors.category.message}</Text>
-      )}
+      <SelectInput
+        name="level"
+        label="Nível de experiência *"
+        options={levelOptions}
+      />
 
-      <Text
-        className={`text-base font-semibold mb-1 
-        ${isDark ? "text-TextPrimaryColorDarkTheme" : "text-TextPrimaryColorLightTheme"}`}
-      >
-        Nível de experiência *
-      </Text>
-      <View
-        className={`border rounded-md h-10 justify-center mb-2
-        ${isDark ? "border-TextPrimaryColorDarkTheme" : "border-TextPrimaryColorLightTheme"}`}
-      >
-        <Picker<string>
-          selectedValue={selectedLevel}
-          onValueChange={(value) => {
-            setValue("level", value);
-            trigger("level");
-          }}
-          style={{
-            color: isDark
-              ? colors.TextPrimaryColorDarkTheme
-              : colors.TextPrimaryColorLightTheme,
-          }}
-          dropdownIconColor={
-            isDark
-              ? colors.TextPrimaryColorDarkTheme
-              : colors.TextPrimaryColorLightTheme
-          }
-        >
-          <Picker.Item label="Selecione..." value="" />
-          <Picker.Item label="Iniciante" value="beginner" />
-          <Picker.Item label="Intermediário" value="intermediate" />
-          <Picker.Item label="Avançado" value="advanced" />
-        </Picker>
-      </View>
+      <SelectInput
+        name="method"
+        label="Método de Ensino *"
+        options={methodOptions}
+      />
 
-      {errors.level && (
-        <Text className="text-ErrorColor mb-4">{errors.level.message}</Text>
-      )}
+      <Input
+        name="maxStudents"
+        label="Máximo de Alunos"
+        placeholder="Ex: Máximo de 8 alunos para aulas em grupo"
+        multiline
+        numberOfLines={4}
+      />
 
       <Input
         name="description"
@@ -115,28 +75,20 @@ export default function StepOneTeachSkill({ onNext }: StepOneTeachSkillProps) {
         numberOfLines={4}
       />
 
-      <Pressable
+      <AppButton
+        label="Avançar"
         onPress={async () => {
           const valid = await trigger([
             "title",
             "category",
             "level",
+            "method",
             "description",
           ]);
-          if (valid) {
-            onNext();
-          }
+          if (valid) onNext();
         }}
-        className={`p-3 rounded-md mt-3
-        ${isDark ? "bg-PrimaryColorLightTheme" : "bg-PrimaryColorDarkTheme"}`}
-      >
-        <Text
-          className={`text-center font-semibold
-          ${isDark ? "text-TextPrimaryColorDarkTheme" : "text-TextPrimaryColorLightTheme"}`}
-        >
-          Avançar
-        </Text>
-      </Pressable>
+        styleExtra="mt-3"
+      />
     </View>
   );
 }
