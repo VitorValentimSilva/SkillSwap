@@ -32,7 +32,7 @@ export default function StepThreeTeachSkill({
       <View className="flex-row justify-between mt-4">
         <AppButton label="Voltar" onPress={onBack} type="secondary" />
         <AppButton
-          label="Enviar"
+          label="Avançar"
           onPress={async () => {
             onNext();
           }}

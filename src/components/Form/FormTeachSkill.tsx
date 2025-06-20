@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Text, View } from "react-native";
+import { Alert, Text, View } from "react-native";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -12,11 +12,13 @@ import StepThreeTeachSkill from "./StepThreeTeachSkill";
 import ReviewTeachSkill from "./ReviewTeachSkill";
 import { ThemeContext } from "../../contexts/ThemeContext";
 import StepProgressTeachSkill from "./StepProgressTeachSkill";
+import { useTeachSkill } from "../../contexts/TeachSkillContext";
 
 export default function FormTeachSkill() {
   const [step, setStep] = useState(1);
   const totalSteps = 4;
   const { isDark } = useContext(ThemeContext);
+  const { submitTeachSkill } = useTeachSkill();
 
   const methods = useForm<TeachSkillFormData>({
     resolver: zodResolver(teachSkillSchema),
@@ -36,9 +38,33 @@ export default function FormTeachSkill() {
 
   const handleNext = () => setStep((s) => Math.min(s + 1, totalSteps));
   const handleBack = () => setStep((s) => Math.max(s - 1, 1));
-  const onSubmitAll = methods.handleSubmit((data) =>
-    console.log("Enviando dados:", data)
-  );
+
+  const onSubmitAll = methods.handleSubmit(async (data) => {
+    try {
+      const id = await submitTeachSkill(data);
+      console.log("Teach skill enviada com sucesso! ID:", id);
+      Alert.alert(
+        "Sucesso",
+        "Sua habilidade foi cadastrada com sucesso!",
+        [
+          {
+            text: "OK",
+            onPress: () => {
+              methods.reset();
+              setStep(1);
+            },
+          },
+        ],
+        { cancelable: false }
+      );
+    } catch (error: any) {
+      console.error("Erro ao enviar dados:", error);
+      Alert.alert(
+        "Erro",
+        "Ocorreu um erro ao enviar seus dados. Tente novamente mais tarde."
+      );
+    }
+  });
 
   const stepTitles = {
     1: "Detalhes da Habilidade",
