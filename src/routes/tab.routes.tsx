@@ -7,6 +7,7 @@ import { colors } from "../styles/colors";
 import { ThemeContext } from "../contexts/ThemeContext";
 import Profile from "../screens/Profile";
 import TeachSkill from "../screens/TeachSkill";
+import LearnSkill from "../screens/LearnSkill";
 
 const Tab = createBottomTabNavigator();
 
@@ -44,9 +45,28 @@ export default function TabRoutes() {
         component={Home}
         options={{
           headerShown: false,
-          tabBarIcon: () => (
-            <Feather
-              name="home"
+          tabBarIcon: ({ focused }) => (
+            <Ionicons
+              name={focused ? "home" : "home-outline"}
+              size={22}
+              color={
+                isDark
+                  ? colors.PrimaryColorDarkTheme
+                  : colors.PrimaryColorLightTheme
+              }
+            />
+          ),
+        }}
+      />
+
+      <Tab.Screen
+        name="Aprenda"
+        component={LearnSkill}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({ focused }) => (
+            <Ionicons
+              name={focused ? "book" : "book-outline"}
               size={22}
               color={
                 isDark
@@ -63,9 +83,9 @@ export default function TabRoutes() {
         component={TeachSkill}
         options={{
           headerShown: false,
-          tabBarIcon: () => (
+          tabBarIcon: ({ focused }) => (
             <Ionicons
-              name="school-outline"
+              name={focused ? "school" : "school-outline"}
               size={22}
               color={
                 isDark
@@ -82,9 +102,9 @@ export default function TabRoutes() {
         component={Profile}
         options={{
           headerShown: false,
-          tabBarIcon: () => (
-            <Feather
-              name="user"
+          tabBarIcon: ({ focused }) => (
+            <Ionicons
+              name={focused ? "person" : "person-outline"}
               size={22}
               color={
                 isDark

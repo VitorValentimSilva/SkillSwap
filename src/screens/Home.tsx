@@ -23,7 +23,7 @@ export default function Home() {
       <View className="flex-row items-center justify-between p-5">
         <HomeButtonComponent
           mode="learn"
-          onPress={() => console.log("Learn pressed")}
+          onPress={() => navigation.navigate("Aprenda")}
         />
         <HomeButtonComponent
           mode="teach"

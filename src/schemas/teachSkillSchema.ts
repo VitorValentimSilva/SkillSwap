@@ -21,15 +21,12 @@ export const teachSkillSchema = z.object({
     .number({ invalid_type_error: "Valor por hora deve ser número" })
     .min(0, "Valor mínimo é 0")
     .refine((val) => !isNaN(val), "Valor por hora é obrigatório"),
-  packages: z
-    .string()
-    .min(5, "Descrição deve ter pelo menos 5 caracteres")
-    .optional(),
+  packages: z.string().optional(),
   daysAvailable: z.array(z.string()).min(1, "Selecione ao menos um dia"),
 
   // Etapa 3
   credentials: z.string().optional(),
-  videoUrl: z.string().url("URL deve ser válida").optional(),
+  videoUrl: z.string().optional(),
 });
 
 export type TeachSkillFormData = z.infer<typeof teachSkillSchema>;
