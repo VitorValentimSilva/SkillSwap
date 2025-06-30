@@ -1,17 +1,10 @@
-import {
-  KeyboardAvoidingView,
-  Platform,
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  Text,
-  View,
-} from "react-native";
+import { SafeAreaView, Text, View } from "react-native";
 import { ThemeContext } from "../contexts/ThemeContext";
 import { useContext } from "react";
 import Header from "../components/Header";
 import { colors } from "../styles/colors";
 import SearchField from "../components/Search/SearchField";
+import ListSkills from "../components/ListSkills";
 
 export default function LearnSkill() {
   const { isDark } = useContext(ThemeContext);
@@ -43,22 +36,9 @@ export default function LearnSkill() {
         </Text>
       </View>
 
-      <KeyboardAvoidingView
-        enabled
-        style={{ flex: 1 }}
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        keyboardVerticalOffset={
-          Platform.OS === "ios" ? 0 : (StatusBar.currentHeight ?? 0)
-        }
-      >
-        <ScrollView
-          contentContainerStyle={{ flexGrow: 1 }}
-          keyboardShouldPersistTaps="handled"
-          style={{ flex: 1 }}
-        >
-          <SearchField />
-        </ScrollView>
-      </KeyboardAvoidingView>
+      <SearchField />
+
+      <ListSkills />
     </SafeAreaView>
   );
 }

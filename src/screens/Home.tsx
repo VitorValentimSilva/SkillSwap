@@ -3,7 +3,7 @@ import Header from "../components/Header";
 import { useContext } from "react";
 import { ThemeContext } from "../contexts/ThemeContext";
 import HomeButtonComponent from "../components/HomeButtonComponent";
-import CategoryComponent from "../components/CategoryComponent";
+import CategoryComponent from "../components/Category/CategoryComponent";
 import { useNavigation } from "@react-navigation/native";
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import { TabParamList } from "../types/tabParamList";

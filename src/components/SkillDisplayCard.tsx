@@ -1,0 +1,138 @@
+import React, { useContext } from "react";
+import { View, Text, TouchableOpacity, ScrollView } from "react-native";
+import { ThemeContext } from "../contexts/ThemeContext";
+
+export interface SkillDisplayCardProps {
+  title: string;
+  category: string;
+  level: string;
+  method: string;
+  description: string;
+  pricePerHour: number;
+  availableDays: string[];
+}
+
+export default function SkillDisplayCard({
+  title,
+  category,
+  level,
+  method,
+  description,
+  pricePerHour,
+  availableDays,
+}: SkillDisplayCardProps) {
+  const { isDark } = useContext(ThemeContext);
+
+  return (
+    <View
+      className={`rounded-2xl p-4 shadow-md mb-5
+        ${isDark ? "bg-SurfaceColorDarkTheme" : "bg-SurfaceColorLightTheme"}`}
+    >
+      <View className="flex-row justify-between items-center mb-3">
+        <Text
+          className={`text-xl font-bold flex-1
+            ${isDark ? "text-TextPrimaryColorDarkTheme" : "text-TextPrimaryColorLightTheme"}`}
+        >
+          {title}
+        </Text>
+        <Text
+          className={`font-bold text-xl
+            ${isDark ? "text-PrimaryColorDarkTheme" : "text-PrimaryColorLightTheme"}`}
+        >
+          ${pricePerHour}/h
+        </Text>
+      </View>
+
+      <View className="flex-row flex-wrap mb-3 space-x-2 gap-3">
+        <View
+          className={`px-3 py-1 rounded-full mb-2
+            ${isDark ? "bg-TextPrimaryColorDarkTheme" : "bg-TextPrimaryColorLightTheme"}`}
+        >
+          <Text
+            className={`text-sm
+            ${isDark ? "text-SurfaceColorDarkTheme" : "text-SurfaceColorLightTheme"}`}
+          >
+            {category}
+          </Text>
+        </View>
+        <View
+          className={`px-3 py-1 rounded-full mb-2
+            ${isDark ? "bg-TextPrimaryColorDarkTheme" : "bg-TextPrimaryColorLightTheme"}`}
+        >
+          <Text
+            className={`text-sm
+            ${isDark ? "text-SurfaceColorDarkTheme" : "text-SurfaceColorLightTheme"}`}
+          >
+            {level}
+          </Text>
+        </View>
+        <View
+          className={`px-3 py-1 rounded-full mb-2
+            ${isDark ? "bg-TextPrimaryColorDarkTheme" : "bg-TextPrimaryColorLightTheme"}`}
+        >
+          <Text
+            className={`text-sm
+            ${isDark ? "text-SurfaceColorDarkTheme" : "text-SurfaceColorLightTheme"}`}
+          >
+            {method}
+          </Text>
+        </View>
+      </View>
+
+      <Text
+        className={`text-sm mb-4
+        ${isDark ? "text-TextPrimaryColorDarkTheme" : "text-TextPrimaryColorLightTheme"}`}
+      >
+        {description}
+      </Text>
+
+      <View className="mb-4">
+        <Text
+          className={`font-semibold mb-2
+            ${isDark ? "text-TextPrimaryColorDarkTheme" : "text-TextPrimaryColorLightTheme"}`}
+        >
+          Dias disponíveis
+        </Text>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          className="space-x-2"
+        >
+          {availableDays.map((day) => (
+            <View
+              key={day}
+              className={`px-3 py-1 rounded-full mr-3
+                ${isDark ? "bg-PrimaryColorDarkTheme" : "bg-PrimaryColorLightTheme"}`}
+            >
+              <Text
+                className={`text-sm
+                ${isDark ? "text-SurfaceColorDarkTheme" : "text-SurfaceColorLightTheme"}`}
+              >
+                {day}
+              </Text>
+            </View>
+          ))}
+        </ScrollView>
+      </View>
+
+      <View className="flex-row mt-2">
+        <TouchableOpacity
+          className={`flex-1 py-3 rounded-lg items-center mr-2
+             ${isDark ? "bg-PrimaryColorLightTheme" : "bg-PrimaryColorDarkTheme"}`}
+        >
+          <Text
+            className={`font-semibold
+            ${isDark ? "text-TextPrimaryColorDarkTheme" : "text-TextPrimaryColorLightTheme"}`}
+          >
+            Book Now
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity className="flex-1 py-3 rounded-lg items-center bg-BackgroundLightTheme">
+          <Text className="font-semibold text-TextPrimaryColorLightTheme">
+            Contato
+          </Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+}

@@ -1,6 +1,14 @@
 import { db } from "./firebaseConfig";
-import { doc, setDoc } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDocs,
+  orderBy,
+  query,
+  setDoc,
+} from "firebase/firestore";
 import { TeachSkillFormData } from "../schemas/teachSkillSchema";
+import { SkillDisplayCardProps } from "../components/SkillDisplayCard";
 
 export async function createTeachSkill(
   uid: string | undefined,
@@ -17,4 +25,21 @@ export async function createTeachSkill(
   });
 
   return id;
+}
+
+export async function fetchAllSkills(): Promise<SkillDisplayCardProps[]> {
+  const q = query(collection(db, "teachSkills"), orderBy("createdAt", "desc"));
+  const snap = await getDocs(q);
+  return snap.docs.map((doc) => {
+    const data = doc.data();
+    return {
+      title: data.title,
+      category: data.category,
+      level: data.level,
+      method: data.method,
+      description: data.description,
+      pricePerHour: data.hourlyRate,
+      availableDays: data.daysAvailable,
+    };
+  });
 }
