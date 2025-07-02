@@ -1,13 +1,17 @@
 import { SafeAreaView, Text, View } from "react-native";
 import { ThemeContext } from "../contexts/ThemeContext";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import Header from "../components/Header";
 import { colors } from "../styles/colors";
 import SearchField from "../components/Search/SearchField";
 import ListSkills from "../components/ListSkills";
+import Filters from "../components/Search/Filters";
+import { EMPTY_FILTERS } from "../utils/constants";
 
 export default function LearnSkill() {
   const { isDark } = useContext(ThemeContext);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedFilters, setSelectedFilters] = useState(EMPTY_FILTERS);
 
   return (
     <SafeAreaView
@@ -36,9 +40,16 @@ export default function LearnSkill() {
         </Text>
       </View>
 
-      <SearchField />
+      <SearchField onPressFilter={() => setModalVisible(true)} />
 
-      <ListSkills />
+      <Filters
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+        selectedFilters={selectedFilters}
+        onChangeFilters={setSelectedFilters}
+      />
+
+      <ListSkills filters={selectedFilters} />
     </SafeAreaView>
   );
 }

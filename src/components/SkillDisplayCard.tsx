@@ -39,7 +39,7 @@ export default function SkillDisplayCard({
           className={`font-bold text-xl
             ${isDark ? "text-PrimaryColorDarkTheme" : "text-PrimaryColorLightTheme"}`}
         >
-          ${pricePerHour}/h
+          R${pricePerHour}/h
         </Text>
       </View>
 
@@ -124,7 +124,7 @@ export default function SkillDisplayCard({
             className={`font-semibold
             ${isDark ? "text-TextPrimaryColorDarkTheme" : "text-TextPrimaryColorLightTheme"}`}
           >
-            Book Now
+            Aprenda agora
           </Text>
         </TouchableOpacity>
         <TouchableOpacity className="flex-1 py-3 rounded-lg items-center bg-BackgroundLightTheme">
