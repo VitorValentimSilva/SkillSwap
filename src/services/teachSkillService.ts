@@ -8,7 +8,7 @@ import {
   setDoc,
 } from "firebase/firestore";
 import { TeachSkillFormData } from "../schemas/teachSkillSchema";
-import { SkillDisplayCardProps } from "../components/SkillDisplayCard";
+import { SkillDisplayCardProps } from "../components/List/SkillDisplayCard";
 
 export async function createTeachSkill(
   uid: string | undefined,

@@ -4,7 +4,7 @@ import { useContext, useState } from "react";
 import Header from "../components/Header";
 import { colors } from "../styles/colors";
 import SearchField from "../components/Search/SearchField";
-import ListSkills from "../components/ListSkills";
+import ListSkills from "../components/List/ListSkills";
 import Filters from "../components/Search/Filters";
 import { EMPTY_FILTERS } from "../utils/constants";
 

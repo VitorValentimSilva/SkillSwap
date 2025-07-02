@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { fetchAllSkills } from "../services/teachSkillService";
-import { SkillDisplayCardProps } from "../components/SkillDisplayCard";
+import { SkillDisplayCardProps } from "../components/List/SkillDisplayCard";
 
 export function useSkills() {
   const [skills, setSkills] = useState<SkillDisplayCardProps[]>([]);

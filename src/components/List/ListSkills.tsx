@@ -1,10 +1,10 @@
 import React, { useContext } from "react";
 import { View, FlatList, ActivityIndicator, Text } from "react-native";
-import { ThemeContext } from "../contexts/ThemeContext";
-import { useSkills } from "../hooks/useSkills";
+import { ThemeContext } from "../../contexts/ThemeContext";
+import { useSkills } from "../../hooks/useSkills";
+import { colors } from "../../styles/colors";
+import { FiltersState } from "../../types/filters";
 import SkillDisplayCard from "./SkillDisplayCard";
-import { colors } from "../styles/colors";
-import { FiltersState } from "../types/filters";
 
 interface ListSkillsProps {
   filters: FiltersState;

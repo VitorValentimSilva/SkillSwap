@@ -1,7 +1,8 @@
-import { SafeAreaView } from "react-native";
+import { SafeAreaView, View } from "react-native";
 import { ThemeContext } from "../contexts/ThemeContext";
 import { useContext } from "react";
 import Header from "../components/Header";
+import TopScreen from "../components/Profile/TopScreen";
 
 export default function Profile() {
   const { isDark } = useContext(ThemeContext);
@@ -13,6 +14,8 @@ export default function Profile() {
       }`}
     >
       <Header />
+
+      <TopScreen />
     </SafeAreaView>
   );
 }
