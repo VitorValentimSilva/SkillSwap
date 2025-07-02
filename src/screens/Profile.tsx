@@ -4,6 +4,7 @@ import { useContext } from "react";
 import Header from "../components/Header";
 import TopScreen from "../components/Profile/TopScreen";
 import ImgProfile from "../components/Profile/ImgProfile";
+import InitialInformation from "../components/Profile/InitialInformation";
 
 export default function Profile() {
   const { isDark } = useContext(ThemeContext);
@@ -20,6 +21,8 @@ export default function Profile() {
         `}
       >
         <ImgProfile />
+
+        <InitialInformation />
       </View>
     </SafeAreaView>
   );
