@@ -11,7 +11,7 @@ export default function ImgProfile() {
 
   if (loading) {
     return (
-      <View className="items-center justify-center mt-[-20px]">
+      <View className="items-center justify-center mt-[-40px]">
         <ActivityIndicator size="small" />
       </View>
     );
@@ -20,7 +20,7 @@ export default function ImgProfile() {
   if (!profile?.photo) return null;
 
   return (
-    <View className="items-center justify-center mt-[-20px]">
+    <View className="items-center justify-center mt-[-40px]">
       <Image
         source={{ uri: profile.photo }}
         className={`w-36 h-36 rounded-full border-4 
