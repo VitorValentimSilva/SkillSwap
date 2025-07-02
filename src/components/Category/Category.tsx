@@ -2,6 +2,8 @@ import React, { useContext } from "react";
 import { View, Text, Pressable } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { ThemeContext } from "../../contexts/ThemeContext";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { TabParamList } from "../../types/tabParamList";
 
 type CategoryProps = {
   name: string;
@@ -17,9 +19,14 @@ export default function Category({
   iconColor,
 }: CategoryProps) {
   const { isDark } = useContext(ThemeContext);
+  const navigation = useNavigation<NavigationProp<TabParamList>>();
+
+  const handlePress = () => {
+    navigation.navigate("Aprenda", { category: name });
+  };
 
   return (
-    <Pressable className="w-1/3 aspect-square p-3">
+    <Pressable className="w-1/3 aspect-square p-3" onPress={handlePress}>
       <View
         className={`
           flex-1

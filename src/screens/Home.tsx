@@ -23,7 +23,9 @@ export default function Home() {
       <View className="flex-row items-center justify-between p-5">
         <HomeButtonComponent
           mode="learn"
-          onPress={() => navigation.navigate("Aprenda")}
+          onPress={() =>
+            navigation.navigate({ name: "Aprenda", params: { category: "" } })
+          }
         />
         <HomeButtonComponent
           mode="teach"

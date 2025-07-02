@@ -1,17 +1,44 @@
 import { SafeAreaView, Text, View } from "react-native";
 import { ThemeContext } from "../contexts/ThemeContext";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Header from "../components/Header";
 import { colors } from "../styles/colors";
 import SearchField from "../components/Search/SearchField";
 import ListSkills from "../components/List/ListSkills";
 import Filters from "../components/Search/Filters";
 import { EMPTY_FILTERS } from "../utils/constants";
+import { RouteProp, useRoute } from "@react-navigation/native";
+import { FiltersState } from "../types/filters";
+
+type RootStackParamList = {
+  Aprenda: { category?: string };
+};
+
+type LearnSkillRouteProp = RouteProp<RootStackParamList, "Aprenda">;
 
 export default function LearnSkill() {
   const { isDark } = useContext(ThemeContext);
   const [modalVisible, setModalVisible] = useState(false);
-  const [selectedFilters, setSelectedFilters] = useState(EMPTY_FILTERS);
+  const route = useRoute<LearnSkillRouteProp>();
+  const { category } = route.params || {};
+
+  const [selectedFilters, setSelectedFilters] = useState<FiltersState>(() => {
+    if (category) {
+      return {
+        ...EMPTY_FILTERS,
+        categoria: [category],
+      };
+    }
+    return EMPTY_FILTERS;
+  });
+
+  useEffect(() => {
+    if (category) {
+      setSelectedFilters((prev) => ({ ...prev, categoria: [category] }));
+    } else {
+      setSelectedFilters(EMPTY_FILTERS);
+    }
+  }, [category]);
 
   return (
     <SafeAreaView

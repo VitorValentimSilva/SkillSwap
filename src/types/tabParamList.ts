@@ -1,6 +1,6 @@
 export type TabParamList = {
   Início: undefined;
-  Aprenda: undefined;
+  Aprenda: { category: string };
   Ensine: undefined;
   Perfil: undefined;
 };
