@@ -4,7 +4,8 @@ import { useFormContext } from "react-hook-form";
 import Input from "./Input";
 import { TeachSkillFormData } from "../../schemas/teachSkillSchema";
 import AppButton from "./AppButton";
-import SelectInput, { Option } from "./SelectInput";
+import SelectInput from "./SelectInput";
+import { FILTER_OPTIONS_AS_SELECT } from "../../utils/constants";
 
 export interface StepOneTeachSkillProps {
   onNext: () => void;
@@ -12,26 +13,6 @@ export interface StepOneTeachSkillProps {
 
 export default function StepOneTeachSkill({ onNext }: StepOneTeachSkillProps) {
   const { trigger } = useFormContext<TeachSkillFormData>();
-
-  const categoryOptions: Option[] = [
-    { label: "Música", value: "Música" },
-    { label: "Programação", value: "Programação" },
-    { label: "Arte", value: "Arte" },
-    { label: "Culinária", value: "Culinária" },
-    { label: "Fotografia", value: "Fotografia" },
-    { label: "Idiomas", value: "Idiomas" },
-  ];
-  const levelOptions: Option[] = [
-    { label: "Iniciante", value: "Iniciante" },
-    { label: "Intermediário", value: "Intermediário" },
-    { label: "Avançado", value: "Avançado" },
-    { label: "Especialista", value: "Especialista" },
-  ];
-  const methodOptions: Option[] = [
-    { label: "Individuais", value: "Individuais" },
-    { label: "Aulas em Grupo", value: "Aulas em Grupo" },
-    { label: "Cursos Online", value: "Cursos Online" },
-  ];
 
   return (
     <View>
@@ -44,19 +25,19 @@ export default function StepOneTeachSkill({ onNext }: StepOneTeachSkillProps) {
       <SelectInput
         name="category"
         label="Categoria *"
-        options={categoryOptions}
+        options={FILTER_OPTIONS_AS_SELECT.categoria}
       />
 
       <SelectInput
         name="level"
         label="Nível de experiência *"
-        options={levelOptions}
+        options={FILTER_OPTIONS_AS_SELECT.dificuldade}
       />
 
       <SelectInput
         name="method"
         label="Método de Ensino *"
-        options={methodOptions}
+        options={FILTER_OPTIONS_AS_SELECT.formatar}
       />
 
       <Input
