@@ -1,13 +1,13 @@
 import React, { useContext } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Feather, Ionicons } from "@expo/vector-icons";
-
+import { Ionicons } from "@expo/vector-icons";
 import Home from "../screens/Home";
 import { colors } from "../styles/colors";
 import { ThemeContext } from "../contexts/ThemeContext";
 import Profile from "../screens/Profile";
 import TeachSkill from "../screens/TeachSkill";
 import LearnSkill from "../screens/LearnSkill";
+import Message from "../screens/Message";
 
 const Tab = createBottomTabNavigator();
 
@@ -86,6 +86,25 @@ export default function TabRoutes() {
           tabBarIcon: ({ focused }) => (
             <Ionicons
               name={focused ? "school" : "school-outline"}
+              size={22}
+              color={
+                isDark
+                  ? colors.PrimaryColorDarkTheme
+                  : colors.PrimaryColorLightTheme
+              }
+            />
+          ),
+        }}
+      />
+
+      <Tab.Screen
+        name="Mensagem"
+        component={Message}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({ focused }) => (
+            <Ionicons
+              name={focused ? "chatbubble" : "chatbubble-outline"}
               size={22}
               color={
                 isDark
