@@ -1,11 +1,11 @@
 import React from "react";
 import { View } from "react-native";
 import { useFormContext } from "react-hook-form";
-import Input from "./Input";
-import { TeachSkillFormData } from "../../schemas/teachSkillSchema";
+import { TeachSkillFormData } from "../../../schemas/teachSkillSchema";
+import Input from "../Input";
+import SelectInput from "../SelectInput";
+import { FILTER_OPTIONS_AS_SELECT } from "../../../utils/constants";
 import AppButton from "./AppButton";
-import SelectInput from "./SelectInput";
-import { FILTER_OPTIONS_AS_SELECT } from "../../utils/constants";
 
 export interface StepOneTeachSkillProps {
   onNext: () => void;

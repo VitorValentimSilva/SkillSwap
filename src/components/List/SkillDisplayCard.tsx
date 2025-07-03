@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { View, Text, TouchableOpacity, ScrollView } from "react-native";
 import { ThemeContext } from "../../contexts/ThemeContext";
+import ListButton from "./ListButton";
 
 export interface SkillDisplayCardProps {
   title: string;
@@ -10,6 +11,7 @@ export interface SkillDisplayCardProps {
   description: string;
   pricePerHour: number;
   availableDays: string[];
+  uid: string;
 }
 
 export default function SkillDisplayCard({
@@ -20,6 +22,7 @@ export default function SkillDisplayCard({
   description,
   pricePerHour,
   availableDays,
+  uid,
 }: SkillDisplayCardProps) {
   const { isDark } = useContext(ThemeContext);
 
@@ -114,25 +117,8 @@ export default function SkillDisplayCard({
           ))}
         </ScrollView>
       </View>
-
-      <View className="flex-row mt-2">
-        <TouchableOpacity
-          className={`flex-1 py-3 rounded-lg items-center mr-2
-             ${isDark ? "bg-PrimaryColorLightTheme" : "bg-PrimaryColorDarkTheme"}`}
-        >
-          <Text
-            className={`font-semibold
-            ${isDark ? "text-TextPrimaryColorDarkTheme" : "text-TextPrimaryColorLightTheme"}`}
-          >
-            Aprenda agora
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity className="flex-1 py-3 rounded-lg items-center bg-BackgroundLightTheme">
-          <Text className="font-semibold text-TextPrimaryColorLightTheme">
-            Contato
-          </Text>
-        </TouchableOpacity>
-      </View>
+      
+      <ListButton instrutorUid={uid} title={title} />
     </View>
   );
 }

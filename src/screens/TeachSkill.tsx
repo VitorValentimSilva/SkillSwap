@@ -10,7 +10,7 @@ import {
 import { ThemeContext } from "../contexts/ThemeContext";
 import { useContext } from "react";
 import Header from "../components/Header";
-import FormTeachSkill from "../components/Form/FormTeachSkill";
+import FormTeachSkill from "../components/Form/TeachSkill/FormTeachSkill";
 import { colors } from "../styles/colors";
 
 export default function TeachSkill() {

@@ -8,11 +8,11 @@ import { ProfileFormData, profileSchema } from "../../schemas/profileSchema";
 import { pickImage } from "../../utils/pickImage";
 import { PhoneNumberInput } from "./PhoneNumberInput";
 
-type Props = {
+type FormProfileProps = {
   onSubmit: (data: ProfileFormData) => Promise<void>;
 };
 
-export default function FormProfile({ onSubmit }: Props) {
+export default function FormProfile({ onSubmit }: FormProfileProps) {
   const { isDark } = useContext(ThemeContext);
   const [photoUri, setPhotoUri] = useState<string>("");
 

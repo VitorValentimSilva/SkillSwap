@@ -5,14 +5,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import {
   teachSkillSchema,
   TeachSkillFormData,
-} from "../../schemas/teachSkillSchema";
+} from "../../../schemas/teachSkillSchema";
+import { ThemeContext } from "../../../contexts/ThemeContext";
+import { useTeachSkill } from "../../../contexts/TeachSkillContext";
+import StepProgressTeachSkill from "./StepProgressTeachSkill";
 import StepOneTeachSkill from "./StepOneTeachSkill";
 import StepTwoTeachSkill from "./StepTwoTeachSkill";
 import StepThreeTeachSkill from "./StepThreeTeachSkill";
 import ReviewTeachSkill from "./ReviewTeachSkill";
-import { ThemeContext } from "../../contexts/ThemeContext";
-import StepProgressTeachSkill from "./StepProgressTeachSkill";
-import { useTeachSkill } from "../../contexts/TeachSkillContext";
 
 export default function FormTeachSkill() {
   const [step, setStep] = useState(1);

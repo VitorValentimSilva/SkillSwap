@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
 import { View, Text, ScrollView } from "react-native";
 import { useFormContext } from "react-hook-form";
-import { TeachSkillFormData } from "../../schemas/teachSkillSchema";
-import { ThemeContext } from "../../contexts/ThemeContext";
+import { TeachSkillFormData } from "../../../schemas/teachSkillSchema";
+import { ThemeContext } from "../../../contexts/ThemeContext";
 import AppButton from "./AppButton";
 
 export interface ReviewTeachSkillProps {

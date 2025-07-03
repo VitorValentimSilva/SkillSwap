@@ -1,11 +1,11 @@
 import React, { useContext } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import { useFormContext } from "react-hook-form";
-import Input from "./Input";
-import { TeachSkillFormData } from "../../schemas/teachSkillSchema";
-import { ThemeContext } from "../../contexts/ThemeContext";
 import { Ionicons } from "@expo/vector-icons";
-import { colors } from "../../styles/colors";
+import { TeachSkillFormData } from "../../../schemas/teachSkillSchema";
+import { ThemeContext } from "../../../contexts/ThemeContext";
+import Input from "../Input";
+import { colors } from "../../../styles/colors";
 import AppButton from "./AppButton";
 
 const daysOfWeek = [

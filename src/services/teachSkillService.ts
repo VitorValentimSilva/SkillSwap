@@ -40,6 +40,7 @@ export async function fetchAllSkills(): Promise<SkillDisplayCardProps[]> {
       description: data.description,
       pricePerHour: data.hourlyRate,
       availableDays: data.daysAvailable,
+      uid: data.uid,
     };
   });
 }

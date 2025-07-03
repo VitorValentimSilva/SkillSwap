@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { Pressable, Text } from "react-native";
-import { ThemeContext } from "../../contexts/ThemeContext";
+import { ThemeContext } from "../../../contexts/ThemeContext";
 
 type AppButtonProps = {
   label: string;

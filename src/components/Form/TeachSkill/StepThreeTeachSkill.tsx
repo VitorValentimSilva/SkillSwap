@@ -1,7 +1,7 @@
 import React from "react";
 import { View } from "react-native";
-import Input from "./Input";
-import VideoInput from "./VideoInput";
+import Input from "../Input";
+import VideoInput from "../VideoInput";
 import AppButton from "./AppButton";
 
 export interface StepThreeTeachSkillProps {
