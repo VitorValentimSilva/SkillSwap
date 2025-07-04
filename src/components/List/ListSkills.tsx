@@ -5,6 +5,7 @@ import { useSkills } from "../../hooks/useSkills";
 import { colors } from "../../styles/colors";
 import { FiltersState } from "../../types/filters";
 import SkillDisplayCard from "./SkillDisplayCard";
+import { getAuth } from "firebase/auth";
 
 interface ListSkillsProps {
   filters: FiltersState;
@@ -13,8 +14,12 @@ interface ListSkillsProps {
 export default function ListSkills({ filters }: ListSkillsProps) {
   const { isDark } = useContext(ThemeContext);
   const { skills, loading, error } = useSkills();
+  const currentUser = getAuth().currentUser;
+  const currentUid = currentUser?.uid;
 
   const filtered = skills.filter((skill) => {
+    if (skill.uid === currentUid) return false;
+
     const byCat =
       filters.categoria.length === 0 ||
       filters.categoria.includes(skill.category);
