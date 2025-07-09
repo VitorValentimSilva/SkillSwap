@@ -1,11 +1,19 @@
-import React, { useContext } from "react";
-import { View, FlatList, ActivityIndicator, Text } from "react-native";
+import React, { useContext, useState } from "react";
+import {
+  View,
+  FlatList,
+  ActivityIndicator,
+  Text,
+  TouchableOpacity,
+} from "react-native";
 import { ThemeContext } from "../../contexts/ThemeContext";
 import { useSkills } from "../../hooks/useSkills";
 import { colors } from "../../styles/colors";
 import { FiltersState } from "../../types/filters";
 import SkillDisplayCard from "./SkillDisplayCard";
 import { getAuth } from "firebase/auth";
+import ModalSkillCard from "./ModalSkillCard";
+import { SkillDisplayCardProps } from "../../types/skill";
 
 interface ListSkillsProps {
   filters: FiltersState;
@@ -16,6 +24,8 @@ export default function ListSkills({ filters }: ListSkillsProps) {
   const { skills, loading, error } = useSkills();
   const currentUser = getAuth().currentUser;
   const currentUid = currentUser?.uid;
+  const [selectedSkill, setSelectedSkill] =
+    useState<SkillDisplayCardProps | null>(null);
 
   const filtered = skills.filter((skill) => {
     if (skill.uid === currentUid) return false;
@@ -55,18 +65,30 @@ export default function ListSkills({ filters }: ListSkillsProps) {
   }
 
   return (
-    <FlatList
-      data={filtered}
-      keyExtractor={(_, idx) => String(idx)}
-      contentContainerStyle={{ padding: 16, paddingBottom: 65 }}
-      renderItem={({ item }) => <SkillDisplayCard {...item} />}
-      ListEmptyComponent={
-        <Text
-          className={`text-center mt-8 ${isDark ? "text-TextPrimaryColorDarkTheme" : "text-TextPrimaryColorLightTheme"}`}
-        >
-          Nenhuma habilidade cadastrada.
-        </Text>
-      }
-    />
+    <>
+      <FlatList
+        data={filtered}
+        keyExtractor={(_, idx) => String(idx)}
+        contentContainerStyle={{ padding: 16, paddingBottom: 65 }}
+        renderItem={({ item }) => (
+          <TouchableOpacity onPress={() => setSelectedSkill(item)}>
+            <SkillDisplayCard {...item} />
+          </TouchableOpacity>
+        )}
+        ListEmptyComponent={
+          <Text
+            className={`text-center mt-8 ${isDark ? "text-TextPrimaryColorDarkTheme" : "text-TextPrimaryColorLightTheme"}`}
+          >
+            Nenhuma habilidade cadastrada.
+          </Text>
+        }
+      />
+
+      <ModalSkillCard
+        visible={!!selectedSkill}
+        skill={selectedSkill}
+        onClose={() => setSelectedSkill(null)}
+      />
+    </>
   );
 }

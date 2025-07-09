@@ -1,18 +1,8 @@
 import React, { useContext } from "react";
-import { View, Text, TouchableOpacity, ScrollView } from "react-native";
+import { View, Text, ScrollView } from "react-native";
 import { ThemeContext } from "../../contexts/ThemeContext";
 import ListButton from "./ListButton";
-
-export interface SkillDisplayCardProps {
-  title: string;
-  category: string;
-  level: string;
-  method: string;
-  description: string;
-  pricePerHour: number;
-  availableDays: string[];
-  uid: string;
-}
+import { SkillDisplayCardProps } from "../../types/skill";
 
 export default function SkillDisplayCard({
   title,
@@ -117,7 +107,7 @@ export default function SkillDisplayCard({
           ))}
         </ScrollView>
       </View>
-      
+
       <ListButton instrutorUid={uid} title={title} />
     </View>
   );

@@ -6,5 +6,9 @@ export interface SkillDisplayCardProps {
   description: string;
   pricePerHour: number;
   availableDays: string[];
+  credentials: string;
+  maxStudents: string;
+  packages: string;
+  videoUrl: string;
   uid: string;
 }

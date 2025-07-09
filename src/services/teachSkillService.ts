@@ -8,7 +8,7 @@ import {
   setDoc,
 } from "firebase/firestore";
 import { TeachSkillFormData } from "../schemas/teachSkillSchema";
-import { SkillDisplayCardProps } from "../components/List/SkillDisplayCard";
+import { SkillDisplayCardProps } from "../types/skill";
 
 export async function createTeachSkill(
   uid: string | undefined,
@@ -41,6 +41,10 @@ export async function fetchAllSkills(): Promise<SkillDisplayCardProps[]> {
       pricePerHour: data.hourlyRate,
       availableDays: data.daysAvailable,
       uid: data.uid,
+      credentials: data.credentials ?? "",
+      maxStudents: data.maxStudents ?? 0,
+      packages: data.packages ?? [],
+      videoUrl: data.videoUrl ?? "",
     };
   });
 }
