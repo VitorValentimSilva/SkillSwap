@@ -9,6 +9,7 @@ import {
 } from "firebase/firestore";
 import { TeachSkillFormData } from "../schemas/teachSkillSchema";
 import { SkillDisplayCardProps } from "../types/skill";
+import { uploadVideoToIPFS } from "./pinFileToIPFS";
 
 export async function createTeachSkill(
   uid: string | undefined,
@@ -17,6 +18,10 @@ export async function createTeachSkill(
   if (!uid) throw new Error("UID é obrigatório");
   const id = `${uid}-${Date.now()}`;
   const docRef = doc(db, "teachSkills", id);
+
+  if (data.videoUrl) {
+    data.videoUrl = await uploadVideoToIPFS(data.videoUrl);
+  }
 
   await setDoc(docRef, {
     ...data,

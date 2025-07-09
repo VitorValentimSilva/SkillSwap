@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { Modal, View, Text, TouchableOpacity, ScrollView } from "react-native";
 import { ThemeContext } from "../../contexts/ThemeContext";
 import { SkillDisplayCardProps } from "../../types/skill";
-import { Video, ResizeMode } from "expo-av";
+import { useVideoPlayer, VideoView } from "expo-video";
 
 interface ModalSkillCardProps {
   visible: boolean;
@@ -16,6 +16,12 @@ export default function ModalSkillCard({
   onClose,
 }: ModalSkillCardProps) {
   const { isDark } = useContext(ThemeContext);
+  const player = useVideoPlayer(
+    skill && skill.videoUrl ? skill.videoUrl : "",
+    (player) => {
+      player.loop = true;
+    }
+  );
 
   if (!skill) return null;
 
@@ -70,12 +76,11 @@ export default function ModalSkillCard({
                 >
                   Vídeo de Apresentação
                 </Text>
-                <Video
-                  source={{ uri: skill.videoUrl }}
-                  useNativeControls
-                  resizeMode={ResizeMode.CONTAIN}
-                  isLooping
-                  className="w-full h-[200px] rounded-lg bg-black"
+                <VideoView
+                  style={{ width: "100%", height: 200, borderRadius: 15 }}
+                  player={player}
+                  allowsFullscreen
+                  allowsPictureInPicture
                 />
               </View>
             )}
