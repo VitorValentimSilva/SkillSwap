@@ -1,12 +1,14 @@
 import React, { useContext } from "react";
-import { Pressable, Text } from "react-native";
+import { ActivityIndicator, Pressable, Text } from "react-native";
 import { ThemeContext } from "../../../contexts/ThemeContext";
+import { colors } from "../../../styles/colors";
 
 type AppButtonProps = {
   label: string;
   onPress: () => void | Promise<void>;
   type?: "primary" | "secondary";
   styleExtra?: string;
+  loading?: boolean;
 };
 
 export default function AppButton({
@@ -14,6 +16,7 @@ export default function AppButton({
   onPress,
   type = "primary",
   styleExtra = "",
+  loading = false,
 }: AppButtonProps) {
   const { isDark } = useContext(ThemeContext);
 
@@ -37,10 +40,24 @@ export default function AppButton({
 
   return (
     <Pressable
-      onPress={onPress}
-      className={`px-6 py-3 rounded-md ${bgClass} ${styleExtra}`}
+      onPress={loading ? undefined : onPress}
+      disabled={loading}
+      className={`px-6 py-3 rounded-md ${bgClass} opacity-${loading ? "50" : "100"} ${styleExtra}`}
     >
-      <Text className={`text-center font-semibold ${textClass}`}>{label}</Text>
+      {loading ? (
+        <ActivityIndicator
+          size="small"
+          color={
+            isDark
+              ? colors.SecondaryColorDarkTheme
+              : colors.SecondaryColorLightTheme
+          }
+        />
+      ) : (
+        <Text className={`text-center font-semibold ${textClass}`}>
+          {label}
+        </Text>
+      )}
     </Pressable>
   );
 }

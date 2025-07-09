@@ -19,6 +19,7 @@ export default function FormTeachSkill() {
   const totalSteps = 4;
   const { isDark } = useContext(ThemeContext);
   const { submitTeachSkill } = useTeachSkill();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const methods = useForm<TeachSkillFormData>({
     resolver: zodResolver(teachSkillSchema),
@@ -40,6 +41,10 @@ export default function FormTeachSkill() {
   const handleBack = () => setStep((s) => Math.max(s - 1, 1));
 
   const onSubmitAll = methods.handleSubmit(async (data) => {
+    if (isSubmitting) return;
+
+    setIsSubmitting(true);
+
     try {
       const id = await submitTeachSkill(data);
       console.log("Teach skill enviada com sucesso! ID:", id);
@@ -63,6 +68,8 @@ export default function FormTeachSkill() {
         "Erro",
         "Ocorreu um erro ao enviar seus dados. Tente novamente mais tarde."
       );
+    } finally {
+      setIsSubmitting(false);
     }
   });
 
@@ -94,7 +101,11 @@ export default function FormTeachSkill() {
             <StepThreeTeachSkill onNext={handleNext} onBack={handleBack} />
           )}
           {step === 4 && (
-            <ReviewTeachSkill onSubmit={onSubmitAll} onBack={handleBack} />
+            <ReviewTeachSkill
+              onSubmit={onSubmitAll}
+              onBack={handleBack}
+              isSubmitting={isSubmitting}
+            />
           )}
         </View>
       </FormProvider>

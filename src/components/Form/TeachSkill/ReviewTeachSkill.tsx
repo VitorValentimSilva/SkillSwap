@@ -8,11 +8,13 @@ import AppButton from "./AppButton";
 export interface ReviewTeachSkillProps {
   onSubmit: () => void;
   onBack: (step: number) => void;
+  isSubmitting: boolean;
 }
 
 export default function ReviewTeachSkill({
   onSubmit,
   onBack,
+  isSubmitting,
 }: ReviewTeachSkillProps) {
   const { getValues } = useFormContext<TeachSkillFormData>();
   const vals = getValues();
@@ -118,7 +120,7 @@ export default function ReviewTeachSkill({
 
       <View className="flex-row justify-between mt-4">
         <AppButton label="Voltar" onPress={() => onBack(2)} type="secondary" />
-        <AppButton label="Enviar" onPress={onSubmit} />
+        <AppButton label="Enviar" onPress={onSubmit} loading={isSubmitting} />
       </View>
     </ScrollView>
   );
