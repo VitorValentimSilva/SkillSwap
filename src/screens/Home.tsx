@@ -43,7 +43,7 @@ export default function Home() {
         </View>
 
         <View className="gap-2">
-          <HomeTitle titulo="Perto de você (25km)" />
+          <HomeTitle titulo="Habilidades da sua cidade" />
           <NearYou />
         </View>
       </ScrollView>

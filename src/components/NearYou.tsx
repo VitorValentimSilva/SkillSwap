@@ -1,13 +1,23 @@
-import { useContext } from "react";
-import { View, Text, ActivityIndicator, ScrollView } from "react-native";
+import { useContext, useState } from "react";
+import {
+  View,
+  Text,
+  ActivityIndicator,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
 import { ThemeContext } from "../contexts/ThemeContext";
-import { useNearbySkills } from "../hooks/useNearbySkills";
 import SkillDisplayCard from "../components/List/SkillDisplayCard";
 import { colors } from "../styles/colors";
+import { useNearbySkillsByCity } from "../hooks/useNearbySkillsByCity";
+import ModalSkillCard from "./List/ModalSkillCard";
+import { SkillDisplayCardProps } from "../types/skill";
 
 export default function NearYou() {
   const { isDark } = useContext(ThemeContext);
-  const { nearbySkills, loading, error } = useNearbySkills();
+  const { nearbySkills, loading, error } = useNearbySkillsByCity();
+  const [selectedSkill, setSelectedSkill] =
+    useState<SkillDisplayCardProps | null>(null);
 
   if (loading) {
     return (
@@ -37,22 +47,34 @@ export default function NearYou() {
             : "text-TextPrimaryColorLightTheme"
         }`}
       >
-        Nenhuma habilidade encontrada próxima a você.
+        Nenhuma habilidade encontrada na mesma cidade sua.
       </Text>
     );
   }
 
   return (
-    <ScrollView
-      horizontal
-      showsHorizontalScrollIndicator={false}
-      contentContainerStyle={{ paddingLeft: 16, gap: 16, paddingTop: 5 }}
-    >
-      {nearbySkills.map((skill, index) => (
-        <View key={index} style={{ width: 320, marginRight: 16 }}>
-          <SkillDisplayCard {...skill} />
-        </View>
-      ))}
-    </ScrollView>
+    <>
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={{ paddingLeft: 16, gap: 16, paddingTop: 5 }}
+      >
+        {nearbySkills.map((skill, index) => (
+          <TouchableOpacity
+            key={index}
+            onPress={() => setSelectedSkill(skill)}
+            style={{ width: 320, marginRight: 16 }}
+          >
+            <SkillDisplayCard {...skill} />
+          </TouchableOpacity>
+        ))}
+      </ScrollView>
+
+      <ModalSkillCard
+        visible={!!selectedSkill}
+        skill={selectedSkill}
+        onClose={() => setSelectedSkill(null)}
+      />
+    </>
   );
 }
