@@ -12,7 +12,6 @@ export default function SkillDisplayCard({
   description,
   pricePerHour,
   availableDays,
-  uid,
 }: SkillDisplayCardProps) {
   const { isDark } = useContext(ThemeContext);
 
@@ -108,7 +107,7 @@ export default function SkillDisplayCard({
         </ScrollView>
       </View>
 
-      <ListButton instrutorUid={uid} title={title} />
+      <ListButton />
     </View>
   );
 }

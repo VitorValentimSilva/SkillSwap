@@ -1,16 +1,9 @@
 import { useContext, useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { ThemeContext } from "../../contexts/ThemeContext";
-import ModalContact from "./ModalContact";
 
-type ListButtonProps = {
-  instrutorUid: string;
-  title: string;
-};
-
-export default function ListButton({ instrutorUid, title }: ListButtonProps) {
+export default function ListButton() {
   const { isDark } = useContext(ThemeContext);
-  const [modalVisible, setModalVisible] = useState(false);
 
   return (
     <View className="flex-col mt-2">
@@ -27,22 +20,12 @@ export default function ListButton({ instrutorUid, title }: ListButtonProps) {
           </Text>
         </TouchableOpacity>
 
-        <TouchableOpacity
-          className="flex-1 py-3 rounded-lg items-center bg-BackgroundLightTheme"
-          onPress={() => setModalVisible(true)}
-        >
+        <TouchableOpacity className="flex-1 py-3 rounded-lg items-center bg-BackgroundLightTheme">
           <Text className="font-semibold text-TextPrimaryColorLightTheme">
-            Contato
+            Mensagem
           </Text>
         </TouchableOpacity>
       </View>
-
-      <ModalContact
-        visible={modalVisible}
-        onClose={() => setModalVisible(false)}
-        instrutorUid={instrutorUid}
-        title={title}
-      />
     </View>
   );
 }
