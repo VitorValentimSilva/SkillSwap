@@ -37,7 +37,7 @@ export default function ListSkills({ filters }: ListSkillsProps) {
       filters.dificuldade.length === 0 ||
       filters.dificuldade.includes(skill.level);
     const byMethod =
-      filters.formatar.length === 0 || filters.formatar.includes(skill.method);
+      filters.formato.length === 0 || filters.formato.includes(skill.method);
     return byCat && byLevel && byMethod;
   });
 

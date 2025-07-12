@@ -12,13 +12,13 @@ export const FILTER_OPTIONS: Record<FilterKeys, string[]> = {
     "Idiomas",
   ],
   dificuldade: ["Iniciante", "Intermediário", "Avançado", "Especialista"],
-  formatar: ["Individuais", "Aulas em Grupo", "Cursos Online"],
+  formato: ["Individuais", "Aulas em Grupo", "Cursos Online"],
 };
 
 export const EMPTY_FILTERS: FiltersState = {
   categoria: [],
   dificuldade: [],
-  formatar: [],
+  formato: [],
 };
 
 function mapToOptions(values: string[]): Option[] {
@@ -28,7 +28,7 @@ function mapToOptions(values: string[]): Option[] {
 export const FILTER_OPTIONS_AS_SELECT: Record<FilterKeys, Option[]> = {
   categoria: mapToOptions(FILTER_OPTIONS.categoria),
   dificuldade: mapToOptions(FILTER_OPTIONS.dificuldade),
-  formatar: mapToOptions(FILTER_OPTIONS.formatar),
+  formato: mapToOptions(FILTER_OPTIONS.formato),
 };
 
 export const CATEGORY_STYLES: Record<

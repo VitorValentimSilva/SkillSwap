@@ -37,7 +37,7 @@ export default function StepOneTeachSkill({ onNext }: StepOneTeachSkillProps) {
       <SelectInput
         name="method"
         label="Método de Ensino *"
-        options={FILTER_OPTIONS_AS_SELECT.formatar}
+        options={FILTER_OPTIONS_AS_SELECT.formato}
       />
 
       <Input
