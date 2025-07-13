@@ -1,93 +1,53 @@
 import React, { useContext, useState } from "react";
-import {
-  View,
-  FlatList,
-  ActivityIndicator,
-  Text,
-  TouchableOpacity,
-} from "react-native";
+import { FlatList, Text, TouchableOpacity } from "react-native";
 import { ThemeContext } from "../../contexts/ThemeContext";
-import { useSkills } from "../../hooks/useSkills";
-import { colors } from "../../styles/colors";
-import { FiltersState } from "../../types/filters";
 import SkillDisplayCard from "./SkillDisplayCard";
 import { getAuth } from "firebase/auth";
 import ModalSkillCard from "./ModalSkillCard";
-import { SkillDisplayCardProps } from "../../types/skill";
+import { Skill } from "../../types/skill";
 
 interface ListSkillsProps {
-  filters: FiltersState;
+  skills: Skill[];
 }
 
-export default function ListSkills({ filters }: ListSkillsProps) {
+export default function ListSkills({ skills }: ListSkillsProps) {
   const { isDark } = useContext(ThemeContext);
-  const { skills, loading, error } = useSkills();
-  const currentUser = getAuth().currentUser;
-  const currentUid = currentUser?.uid;
-  const [selectedSkill, setSelectedSkill] =
-    useState<SkillDisplayCardProps | null>(null);
+  const currentUid = getAuth().currentUser?.uid;
 
-  const filtered = skills.filter((skill) => {
-    if (skill.uid === currentUid) return false;
+  const visible = skills.filter((s) => s.uid !== currentUid);
+  const [selected, setSelected] = useState<Skill | null>(null);
 
-    const byCat =
-      filters.categoria.length === 0 ||
-      filters.categoria.includes(skill.category);
-    const byLevel =
-      filters.dificuldade.length === 0 ||
-      filters.dificuldade.includes(skill.level);
-    const byMethod =
-      filters.formato.length === 0 || filters.formato.includes(skill.method);
-    return byCat && byLevel && byMethod;
-  });
-
-  if (loading) {
+  if (!visible.length) {
     return (
-      <View className="flex-1 justify-center items-center">
-        <ActivityIndicator
-          size="large"
-          color={
-            isDark
-              ? colors.PrimaryColorDarkTheme
-              : colors.PrimaryColorLightTheme
-          }
-        />
-      </View>
-    );
-  }
-
-  if (error) {
-    return (
-      <View className="p-4">
-        <Text className="text-center text-ErrorColor">{error}</Text>
-      </View>
+      <Text
+        className={`text-center mt-8 ${
+          isDark
+            ? "text-TextPrimaryColorDarkTheme"
+            : "text-TextSecondaryColorLightTheme"
+        }`}
+      >
+        Nenhuma habilidade encontrada.
+      </Text>
     );
   }
 
   return (
     <>
       <FlatList
-        data={filtered}
-        keyExtractor={(_, idx) => String(idx)}
+        data={visible}
+        keyExtractor={(item) => item.id}
         contentContainerStyle={{ padding: 16, paddingBottom: 65 }}
         renderItem={({ item }) => (
-          <TouchableOpacity onPress={() => setSelectedSkill(item)}>
+          <TouchableOpacity onPress={() => setSelected(item)}>
             <SkillDisplayCard {...item} />
           </TouchableOpacity>
         )}
-        ListEmptyComponent={
-          <Text
-            className={`text-center mt-8 ${isDark ? "text-TextPrimaryColorDarkTheme" : "text-TextPrimaryColorLightTheme"}`}
-          >
-            Nenhuma habilidade cadastrada.
-          </Text>
-        }
       />
 
       <ModalSkillCard
-        visible={!!selectedSkill}
-        skill={selectedSkill}
-        onClose={() => setSelectedSkill(null)}
+        visible={!!selected}
+        skill={selected}
+        onClose={() => setSelected(null)}
       />
     </>
   );

@@ -4,7 +4,15 @@ import { useContext } from "react";
 import { ThemeContext } from "../../contexts/ThemeContext";
 import { colors } from "../../styles/colors";
 
-export default function SearchSkills() {
+interface SearchSkillsProps {
+  value: string;
+  onChangeText: (text: string) => void;
+}
+
+export default function SearchSkills({
+  value,
+  onChangeText,
+}: SearchSkillsProps) {
   const { isDark } = useContext(ThemeContext);
 
   return (
@@ -26,12 +34,14 @@ export default function SearchSkills() {
 
         <TextInput
           className={`flex-1 px-3 py-3 ${isDark ? "text-TextSecondaryColorDarkTheme" : "text-TextSecondaryColorLightTheme"}`}
-          placeholder="Pesquisar habilidades, instrutores ou categorias"
+          placeholder="Pesquisar pelas habilidades"
           placeholderTextColor={
             isDark
               ? colors.TextSecondaryColorDarkTheme
               : colors.TextSecondaryColorLightTheme
           }
+          value={value}
+          onChangeText={onChangeText}
         />
       </View>
     </View>

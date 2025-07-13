@@ -2,14 +2,12 @@ import { useEffect, useState } from "react";
 import { getDoc, doc } from "firebase/firestore";
 import { db } from "../services/firebaseConfig";
 import { getAuth } from "firebase/auth";
-import { SkillDisplayCardProps } from "../types/skill";
+import { Skill } from "../types/skill";
 import { useSkills } from "./useSkills";
 
 export function useNearbySkillsByCity(limit: number = 100) {
   const { skills, loading: skillsLoading } = useSkills();
-  const [filteredSkills, setFilteredSkills] = useState<SkillDisplayCardProps[]>(
-    []
-  );
+  const [filteredSkills, setFilteredSkills] = useState<Skill[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -35,7 +33,7 @@ export function useNearbySkillsByCity(limit: number = 100) {
         const userCityRaw = (userData.city as string) ?? "";
         const userCity = userCityRaw.trim().toLowerCase();
 
-        const matches: SkillDisplayCardProps[] = [];
+        const matches: Skill[] = [];
         for (const skill of skills) {
           if (skill.uid === currentUser.uid) continue;
 

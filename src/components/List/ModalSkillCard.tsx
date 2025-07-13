@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { Modal, View, Text, TouchableOpacity, ScrollView } from "react-native";
 import { ThemeContext } from "../../contexts/ThemeContext";
-import { SkillDisplayCardProps } from "../../types/skill";
+import { Skill } from "../../types/skill";
 import { useVideoPlayer, VideoView } from "expo-video";
 import { colors } from "../../styles/colors";
 import { Ionicons } from "@expo/vector-icons";
@@ -10,7 +10,7 @@ import DetailSection from "./DetailSection";
 
 interface ModalSkillCardProps {
   visible: boolean;
-  skill: SkillDisplayCardProps | null;
+  skill: Skill | null;
   onClose: () => void;
 }
 
@@ -156,7 +156,7 @@ export default function ModalSkillCard({
             {skill.packages && (
               <DetailSection
                 title="Pacotes"
-                content={skill.packages}
+                content={skill.packages.join(", ")}
                 icon="gift-outline"
               />
             )}

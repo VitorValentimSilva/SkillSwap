@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { View, Text, ScrollView } from "react-native";
 import { ThemeContext } from "../../contexts/ThemeContext";
 import ListButton from "./ListButton";
-import { SkillDisplayCardProps } from "../../types/skill";
+import { Skill } from "../../types/skill";
 
 export default function SkillDisplayCard({
   title,
@@ -12,7 +12,7 @@ export default function SkillDisplayCard({
   description,
   pricePerHour,
   availableDays,
-}: SkillDisplayCardProps) {
+}: Skill) {
   const { isDark } = useContext(ThemeContext);
 
   return (

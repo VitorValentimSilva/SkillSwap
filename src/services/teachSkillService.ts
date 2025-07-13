@@ -8,7 +8,7 @@ import {
   setDoc,
 } from "firebase/firestore";
 import { TeachSkillFormData } from "../schemas/teachSkillSchema";
-import { SkillDisplayCardProps } from "../types/skill";
+import { Skill } from "../types/skill";
 import { uploadVideoToIPFS } from "./pinFileToIPFS";
 
 export async function createTeachSkill(
@@ -32,12 +32,13 @@ export async function createTeachSkill(
   return id;
 }
 
-export async function fetchAllSkills(): Promise<SkillDisplayCardProps[]> {
+export async function fetchAllSkills(): Promise<Skill[]> {
   const q = query(collection(db, "teachSkills"), orderBy("createdAt", "desc"));
   const snap = await getDocs(q);
   return snap.docs.map((doc) => {
     const data = doc.data();
     return {
+      id: doc.id,
       title: data.title,
       category: data.category,
       level: data.level,

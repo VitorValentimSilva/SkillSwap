@@ -1,14 +1,15 @@
-export interface SkillDisplayCardProps {
+export interface Skill {
+  id: string;
   title: string;
+  description: string;
   category: string;
   level: string;
   method: string;
-  description: string;
   pricePerHour: number;
   availableDays: string[];
-  credentials: string;
-  maxStudents: string;
-  packages: string;
-  videoUrl: string;
+  credentials?: string;
+  maxStudents?: number;
+  packages?: string[];
+  videoUrl?: string;
   uid: string;
 }

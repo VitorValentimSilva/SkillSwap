@@ -11,13 +11,12 @@ import SkillDisplayCard from "../components/List/SkillDisplayCard";
 import { colors } from "../styles/colors";
 import { useNearbySkillsByCity } from "../hooks/useNearbySkillsByCity";
 import ModalSkillCard from "./List/ModalSkillCard";
-import { SkillDisplayCardProps } from "../types/skill";
+import { Skill } from "../types/skill";
 
 export default function NearYou() {
   const { isDark } = useContext(ThemeContext);
   const { nearbySkills, loading, error } = useNearbySkillsByCity();
-  const [selectedSkill, setSelectedSkill] =
-    useState<SkillDisplayCardProps | null>(null);
+  const [selectedSkill, setSelectedSkill] = useState<Skill | null>(null);
 
   if (loading) {
     return (

@@ -1,4 +1,4 @@
-import { SafeAreaView, Text, View } from "react-native";
+import { ActivityIndicator, SafeAreaView, Text, View } from "react-native";
 import { ThemeContext } from "../contexts/ThemeContext";
 import { useContext, useEffect, useState } from "react";
 import Header from "../components/Header";
@@ -9,6 +9,8 @@ import Filters from "../components/Search/Filters";
 import { EMPTY_FILTERS } from "../utils/constants";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import { FiltersState } from "../types/filters";
+import { useSkills } from "../hooks/useSkills";
+import { useFilteredSkills } from "../hooks/useFilteredSkills";
 
 type RootStackParamList = {
   Aprenda: { category?: string };
@@ -18,26 +20,26 @@ type LearnSkillRouteProp = RouteProp<RootStackParamList, "Aprenda">;
 
 export default function LearnSkill() {
   const { isDark } = useContext(ThemeContext);
-  const [modalVisible, setModalVisible] = useState(false);
   const route = useRoute<LearnSkillRouteProp>();
   const { category } = route.params || {};
 
-  const [selectedFilters, setSelectedFilters] = useState<FiltersState>(() => {
-    if (category) {
-      return {
-        ...EMPTY_FILTERS,
-        categoria: [category],
-      };
-    }
-    return EMPTY_FILTERS;
-  });
+  const [modalVisible, setModalVisible] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedFilters, setSelectedFilters] = useState<FiltersState>(() =>
+    category ? { ...EMPTY_FILTERS, categoria: [category] } : EMPTY_FILTERS
+  );
+
+  const { skills: allSkills, loading, error } = useSkills();
+  const filteredSkills = useFilteredSkills(
+    allSkills,
+    selectedFilters,
+    searchQuery
+  );
 
   useEffect(() => {
-    if (category) {
-      setSelectedFilters((prev) => ({ ...prev, categoria: [category] }));
-    } else {
-      setSelectedFilters(EMPTY_FILTERS);
-    }
+    setSelectedFilters(
+      category ? { ...EMPTY_FILTERS, categoria: [category] } : EMPTY_FILTERS
+    );
   }, [category]);
 
   return (
@@ -67,16 +69,36 @@ export default function LearnSkill() {
         </Text>
       </View>
 
-      <SearchField onPressFilter={() => setModalVisible(true)} />
+      <SearchField
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+        onPressFilter={() => setModalVisible(true)}
+      />
 
       <Filters
         visible={modalVisible}
-        onClose={() => setModalVisible(false)}
         selectedFilters={selectedFilters}
         onChangeFilters={setSelectedFilters}
+        onClose={() => setModalVisible(false)}
       />
 
-      <ListSkills filters={selectedFilters} />
+      {loading ? (
+        <ActivityIndicator
+          style={{ flex: 1, justifyContent: "center" }}
+          size="large"
+          color={
+            isDark
+              ? colors.PrimaryColorDarkTheme
+              : colors.PrimaryColorLightTheme
+          }
+        />
+      ) : error ? (
+        <View className="p-4">
+          <Text className="text-center text-ErrorColor">{error}</Text>
+        </View>
+      ) : (
+        <ListSkills skills={filteredSkills} />
+      )}
     </SafeAreaView>
   );
 }

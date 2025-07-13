@@ -4,13 +4,19 @@ import SearchSkills from "./SearchSkills";
 import FilterButton from "./FilterButton";
 
 interface SearchFieldProps {
+  searchQuery: string;
+  onSearchChange: (t: string) => void;
   onPressFilter: () => void;
 }
 
-export default function SearchField({ onPressFilter }: SearchFieldProps) {
+export default function SearchField({
+  searchQuery,
+  onSearchChange,
+  onPressFilter,
+}: SearchFieldProps) {
   return (
     <View className="flex-row items-center pl-1 py-1 w-full">
-      <SearchSkills />
+      <SearchSkills value={searchQuery} onChangeText={onSearchChange} />
 
       <FilterButton onPressFilter={onPressFilter} />
     </View>
