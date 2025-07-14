@@ -1,6 +1,7 @@
 import { db } from "./firebaseConfig";
 import {
   collection,
+  deleteDoc,
   doc,
   getDocs,
   orderBy,
@@ -53,4 +54,9 @@ export async function fetchAllSkills(): Promise<Skill[]> {
       videoUrl: data.videoUrl ?? "",
     };
   });
+}
+
+export async function deleteSkill(id: string): Promise<void> {
+  const docRef = doc(db, "teachSkills", id);
+  await deleteDoc(docRef);
 }

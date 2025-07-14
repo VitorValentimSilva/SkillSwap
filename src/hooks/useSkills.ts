@@ -1,32 +1,45 @@
-import { useEffect, useState } from "react";
-import { fetchAllSkills } from "../services/teachSkillService";
+import { useCallback, useEffect, useState } from "react";
+import { deleteSkill, fetchAllSkills } from "../services/skillService";
 import { Skill } from "../types/skill";
+import { unpinVideoFromIPFS } from "../services/pinFileToIPFS";
 
 export function useSkills() {
   const [skills, setSkills] = useState<Skill[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const docs = await fetchAllSkills();
-        const withId = docs.map((d) => {
-          const { id, ...rest } = d;
-          return {
-            id: `${d.uid}-${d.title}`,
-            ...rest,
-          };
-        });
-        setSkills(withId);
-      } catch (err: any) {
-        console.error(err);
-        setError("Não foi possível carregar as habilidades.");
-      } finally {
-        setLoading(false);
-      }
-    })();
+  const loadSkills = useCallback(async () => {
+    setLoading(true);
+    try {
+      const docs = await fetchAllSkills();
+      setSkills(docs);
+    } catch (err: any) {
+      console.error(err);
+      setError("Não foi possível carregar as habilidades.");
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
-  return { skills, loading, error };
+  useEffect(() => {
+    loadSkills();
+  }, [loadSkills]);
+
+  const removeSkill = useCallback(
+    async (skill: Skill) => {
+      try {
+        if (skill.videoUrl) {
+          await unpinVideoFromIPFS(skill.videoUrl);
+        }
+        await deleteSkill(skill.id);
+        await loadSkills();
+      } catch (err) {
+        console.error("Erro ao excluir habilidade:", err);
+        throw err;
+      }
+    },
+    [loadSkills]
+  );
+
+  return { skills, loading, error, removeSkill };
 }

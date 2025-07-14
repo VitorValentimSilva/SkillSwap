@@ -39,3 +39,23 @@ export async function uploadVideoToIPFS(localUri: string): Promise<string> {
 
   return `https://gateway.pinata.cloud/ipfs/${json.IpfsHash}`;
 }
+
+export async function unpinVideoFromIPFS(videoUrl: string): Promise<void> {
+  const match = videoUrl.match(/\/ipfs\/(.+)$/);
+  if (!match) return;
+  const hash = match[1];
+
+  const response = await fetch(
+    `https://api.pinata.cloud/pinning/unpin/${hash}`,
+    {
+      method: "DELETE",
+      headers: {
+        pinata_api_key: process.env.PINATA_API_KEY || "",
+        pinata_secret_api_key: process.env.PINATA_SECRET_API_KEY || "",
+      },
+    }
+  );
+  if (!response.ok) {
+    console.error("Falha ao despin de vídeo:", await response.text());
+  }
+}

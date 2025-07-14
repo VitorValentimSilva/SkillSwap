@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, ReactNode } from "react";
 import { TeachSkillFormData } from "../schemas/teachSkillSchema";
-import { createTeachSkill } from "../services/teachSkillService";
+import { createTeachSkill } from "../services/skillService";
 import { useAuth } from "./AuthContext";
 
 type TeachSkillContextType = {
