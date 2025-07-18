@@ -12,6 +12,8 @@ type SelectInputProps = {
   label: string;
   options: Option[];
   placeholder?: string;
+  selectedValue?: string;
+  onValueChange?: (value: string) => void;
 };
 
 export default function SelectInput({
@@ -19,6 +21,8 @@ export default function SelectInput({
   label,
   options,
   placeholder = "Selecione...",
+  selectedValue: externalValue,
+  onValueChange: externalOnChange,
 }: SelectInputProps) {
   const { isDark } = useContext(ThemeContext);
   const {
@@ -27,19 +31,27 @@ export default function SelectInput({
     trigger,
     formState: { errors },
   } = useFormContext();
-
   const {
-    field: { value },
+    field: { value: internalValue },
   } = useController({
     name,
     control,
     rules: { required: `${label.replace("*", "").trim()} é obrigatório` },
   });
 
+  const value = externalValue !== undefined ? externalValue : internalValue;
+  const handleChange = (v: string) => {
+    if (externalOnChange) {
+      externalOnChange(v);
+    } else {
+      setValue(name, v);
+      trigger(name);
+    }
+  };
+
   const borderColor = isDark
     ? "border-TextPrimaryColorDarkTheme"
     : "border-TextPrimaryColorLightTheme";
-
   const textColor = isDark
     ? colors.TextPrimaryColorDarkTheme
     : colors.TextPrimaryColorLightTheme;
@@ -50,7 +62,7 @@ export default function SelectInput({
         className={`text-base font-semibold mb-1 ${
           isDark
             ? "text-TextPrimaryColorDarkTheme"
-            : "text-TextPrimaryColorLightTheme"
+            : "text-TextSecondaryColorLightTheme"
         }`}
       >
         {label}
@@ -59,10 +71,7 @@ export default function SelectInput({
       <View className={`border rounded-md h-10 justify-center ${borderColor}`}>
         <Picker
           selectedValue={value}
-          onValueChange={(v) => {
-            setValue(name, v);
-            trigger(name);
-          }}
+          onValueChange={handleChange}
           style={{ color: textColor }}
           dropdownIconColor={textColor}
         >

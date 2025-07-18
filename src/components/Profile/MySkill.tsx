@@ -9,6 +9,7 @@ import MySkillDisplayCard from "./MySkillDisplayCard";
 import { colors } from "../../styles/colors";
 import { Skill } from "../../types/skill";
 import { unpinVideoFromIPFS } from "../../services/pinFileToIPFS";
+import EditSkillModal from "./EditSkillModal";
 
 interface MySkillProps {
   maxItems?: number;
@@ -17,7 +18,8 @@ interface MySkillProps {
 export default function MySkill({ maxItems }: MySkillProps) {
   const { isDark } = useContext(ThemeContext);
   const currentUid = getAuth().currentUser?.uid;
-
+  const [editVisible, setEditVisible] = useState(false);
+  const [skillToEdit, setSkillToEdit] = useState<Skill | null>(null);
   const [allSkillsLocal, setAllSkillsLocal] = useState<Skill[]>([]);
   const [localLoading, setLocalLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -106,6 +108,10 @@ export default function MySkill({ maxItems }: MySkillProps) {
           <MySkillDisplayCard
             {...item}
             onDelete={() => handleDeletePress(item)}
+            onEdit={() => {
+              setSkillToEdit(item);
+              setEditVisible(true);
+            }}
           />
         )}
       />
@@ -116,6 +122,20 @@ export default function MySkill({ maxItems }: MySkillProps) {
         confirmLoading={deleting}
         onConfirm={handleConfirmDelete}
         onCancel={handleCancelDelete}
+      />
+
+      <EditSkillModal
+        visible={editVisible}
+        skill={skillToEdit}
+        onSave={(updated) => {
+          setEditVisible(false);
+          setSkillToEdit(null);
+          loadSkillsLocal();
+        }}
+        onCancel={() => {
+          setEditVisible(false);
+          setSkillToEdit(null);
+        }}
       />
     </>
   );

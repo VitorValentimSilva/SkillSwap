@@ -8,7 +8,7 @@ import Input from "../Input";
 import { colors } from "../../../styles/colors";
 import AppButton from "./AppButton";
 
-const daysOfWeek = [
+export const daysOfWeek = [
   "Domingo",
   "Segunda",
   "Terça",

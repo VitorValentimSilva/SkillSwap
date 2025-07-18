@@ -32,6 +32,10 @@ export default function Input({ name, label, ...props }: Props) {
       if (month) formatted += `/${month}`;
       if (year) formatted += `/${year}`;
       setValue(name, formatted);
+    } else if (name === "pricePerHour") {
+      const num = text.replace(/[^0-9]/g, "");
+      onChange(num === "" ? undefined : Number(num));
+      trigger(name);
     } else {
       onChange(text);
       trigger(name);
@@ -52,11 +56,13 @@ export default function Input({ name, label, ...props }: Props) {
       <RNTextInput
         className={`border rounded-md px-3 py-2
           ${isDark ? "border-TextPrimaryColorDarkTheme text-TextPrimaryColorDarkTheme" : "border-TextPrimaryColorLightTheme text-TextPrimaryColorLightTheme"}`}
-        value={value}
+        value={value != null ? String(value) : ""}
         onChangeText={handleChangeText}
         onBlur={onBlur}
         maxLength={name === "data" ? 10 : undefined}
-        keyboardType={name === "valor" ? "decimal-pad" : props.keyboardType}
+        keyboardType={
+          name === "pricePerHour" ? "decimal-pad" : props.keyboardType
+        }
         placeholder={props.placeholder}
         placeholderTextColor={
           isDark
