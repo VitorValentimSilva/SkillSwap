@@ -41,5 +41,5 @@ export function useSkills() {
     [loadSkills]
   );
 
-  return { skills, loading, error, removeSkill };
+  return { skills, loading, error, removeSkill, loadSkills };
 }

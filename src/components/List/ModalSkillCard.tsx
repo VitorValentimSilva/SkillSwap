@@ -67,7 +67,7 @@ export default function ModalSkillCard({
                 className={`text-xl font-bold
                   ${isDark ? "text-PrimaryColorLightTheme" : "text-PrimaryColorDarkTheme"}`}
               >
-                R${skill.pricePerHour}/h
+                R${skill.hourlyRate}/h
               </Text>
             </View>
           </View>
@@ -156,7 +156,11 @@ export default function ModalSkillCard({
             {skill.packages && (
               <DetailSection
                 title="Pacotes"
-                content={skill.packages.join(", ")}
+                content={
+                  Array.isArray(skill.packages)
+                    ? skill.packages.join(", ")
+                    : skill.packages
+                }
                 icon="gift-outline"
               />
             )}
@@ -176,7 +180,7 @@ export default function ModalSkillCard({
               </View>
 
               <View className="flex-row flex-wrap">
-                {skill.availableDays.map((day) => (
+                {skill.daysAvailable.map((day) => (
                   <View
                     key={day}
                     className={`px-4 py-2 rounded-2xl mr-3 mb-3 shadow-sm

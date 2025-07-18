@@ -1,15 +1,18 @@
-import React, { useContext, useState, useCallback } from "react";
+import React, { useContext, useState } from "react";
 import { FlatList, Text, ActivityIndicator } from "react-native";
 import { getAuth } from "firebase/auth";
 import { useFocusEffect } from "@react-navigation/native";
 import { ThemeContext } from "../../contexts/ThemeContext";
-import { fetchAllSkills, deleteSkill } from "../../services/skillService";
+import { deleteSkill } from "../../services/skillService";
 import ConfirmDeleteModal from "./ConfirmDeleteModal";
 import MySkillDisplayCard from "./MySkillDisplayCard";
 import { colors } from "../../styles/colors";
 import { Skill } from "../../types/skill";
 import { unpinVideoFromIPFS } from "../../services/pinFileToIPFS";
 import EditSkillModal from "./EditSkillModal";
+import { useEditSkill } from "../../hooks/useEditSkill";
+import { EditSkillContext } from "../../contexts/EditSkillContext";
+import { useSkills } from "../../hooks/useSkills";
 
 interface MySkillProps {
   maxItems?: number;
@@ -17,44 +20,21 @@ interface MySkillProps {
 
 export default function MySkill({ maxItems }: MySkillProps) {
   const { isDark } = useContext(ThemeContext);
+  const { skills, loading, error, removeSkill, loadSkills } = useSkills();
   const currentUid = getAuth().currentUser?.uid;
-  const [editVisible, setEditVisible] = useState(false);
-  const [skillToEdit, setSkillToEdit] = useState<Skill | null>(null);
-  const [allSkillsLocal, setAllSkillsLocal] = useState<Skill[]>([]);
-  const [localLoading, setLocalLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const loadSkillsLocal = useCallback(async () => {
-    setLocalLoading(true);
-    try {
-      const docs = await fetchAllSkills();
-      setAllSkillsLocal(docs);
-      setError(null);
-    } catch {
-      setError("Não foi possível carregar as habilidades.");
-    } finally {
-      setLocalLoading(false);
-    }
-  }, []);
-
-  useFocusEffect(
-    React.useCallback(() => {
-      loadSkillsLocal();
-    }, [loadSkillsLocal])
-  );
-
-  const mySkills = allSkillsLocal.filter((s) => s.uid === currentUid);
-  const displayedSkills =
-    maxItems != null ? mySkills.slice(0, maxItems) : mySkills;
-
+  const { skillToEdit, openForEdit, closeEdit } = useContext(EditSkillContext);
+  const { editSkill } = useEditSkill();
   const [skillToDelete, setSkillToDelete] = useState<Skill | null>(null);
   const [confirmVisible, setConfirmVisible] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const mySkills = skills.filter((s) => s.uid === currentUid);
+  const displayed = maxItems != null ? mySkills.slice(0, maxItems) : mySkills;
 
-  const handleDeletePress = (skill: Skill) => {
-    setSkillToDelete(skill);
-    setConfirmVisible(true);
-  };
+  useFocusEffect(
+    React.useCallback(() => {
+      loadSkills();
+    }, [loadSkills])
+  );
 
   const handleConfirmDelete = async () => {
     if (!skillToDelete) return;
@@ -64,7 +44,7 @@ export default function MySkill({ maxItems }: MySkillProps) {
         await unpinVideoFromIPFS(skillToDelete.videoUrl);
       }
       await deleteSkill(skillToDelete.id);
-      await loadSkillsLocal();
+      await loadSkills();
     } finally {
       setDeleting(false);
       setConfirmVisible(false);
@@ -77,7 +57,7 @@ export default function MySkill({ maxItems }: MySkillProps) {
     setSkillToDelete(null);
   };
 
-  if (localLoading) {
+  if (loading) {
     return (
       <ActivityIndicator
         color={
@@ -100,18 +80,15 @@ export default function MySkill({ maxItems }: MySkillProps) {
   return (
     <>
       <FlatList
-        data={displayedSkills}
+        data={displayed}
         keyExtractor={(item) => item.id}
         scrollEnabled={maxItems == null}
         contentContainerStyle={{ paddingTop: 10 }}
         renderItem={({ item }) => (
           <MySkillDisplayCard
             {...item}
-            onDelete={() => handleDeletePress(item)}
-            onEdit={() => {
-              setSkillToEdit(item);
-              setEditVisible(true);
-            }}
+            onDelete={() => removeSkill(item).then(loadSkills)}
+            onEdit={() => openForEdit(item)}
           />
         )}
       />
@@ -125,16 +102,17 @@ export default function MySkill({ maxItems }: MySkillProps) {
       />
 
       <EditSkillModal
-        visible={editVisible}
+        visible={!!skillToEdit}
         skill={skillToEdit}
-        onSave={(updated) => {
-          setEditVisible(false);
-          setSkillToEdit(null);
-          loadSkillsLocal();
+        onSave={async (updated) => {
+          console.log("Atualizando skill:", skillToEdit, updated);
+          if (!skillToEdit) return;
+          await editSkill(skillToEdit.id, updated);
+          closeEdit();
+          loadSkills();
         }}
         onCancel={() => {
-          setEditVisible(false);
-          setSkillToEdit(null);
+          closeEdit();
         }}
       />
     </>

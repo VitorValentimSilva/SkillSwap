@@ -10,8 +10,8 @@ export default function SkillDisplayCard({
   level,
   method,
   description,
-  pricePerHour,
-  availableDays,
+  hourlyRate,
+  daysAvailable,
 }: Skill) {
   const { isDark } = useContext(ThemeContext);
 
@@ -31,7 +31,7 @@ export default function SkillDisplayCard({
           className={`font-bold text-xl
             ${isDark ? "text-PrimaryColorDarkTheme" : "text-PrimaryColorLightTheme"}`}
         >
-          R${pricePerHour}/h
+          R${hourlyRate}/h
         </Text>
       </View>
 
@@ -90,7 +90,7 @@ export default function SkillDisplayCard({
           showsHorizontalScrollIndicator={false}
           className="space-x-2"
         >
-          {availableDays.map((day) => (
+          {daysAvailable.map((day) => (
             <View
               key={day}
               className={`px-3 py-1 rounded-full mr-3

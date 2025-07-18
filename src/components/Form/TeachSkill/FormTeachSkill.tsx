@@ -28,12 +28,12 @@ export default function FormTeachSkill() {
       category: "",
       level: "",
       method: "",
-      maxStudents: "",
-      description: "",
-      packages: "",
+      hourlyRate: 0,
       daysAvailable: [],
       credentials: "",
       videoUrl: "",
+      maxStudents: "",
+      packages: undefined,
     },
   });
 

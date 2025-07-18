@@ -16,8 +16,8 @@ export default function MySkillDisplayCard({
   level,
   method,
   description,
-  pricePerHour,
-  availableDays,
+  hourlyRate,
+  daysAvailable,
   onEdit,
   onDelete,
 }: MySkillDisplayCardProps) {
@@ -39,7 +39,7 @@ export default function MySkillDisplayCard({
           className={`font-bold text-xl
           ${isDark ? "text-PrimaryColorDarkTheme" : "text-PrimaryColorLightTheme"}`}
         >
-          R${pricePerHour}/h
+          R${hourlyRate}/h
         </Text>
       </View>
 
@@ -98,7 +98,7 @@ export default function MySkillDisplayCard({
           showsHorizontalScrollIndicator={false}
           className="space-x-2"
         >
-          {availableDays.map((day) => (
+          {daysAvailable.map((day) => (
             <View
               key={day}
               className={`px-3 py-1 rounded-full mr-3

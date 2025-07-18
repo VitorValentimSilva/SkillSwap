@@ -5,11 +5,11 @@ export interface Skill {
   category: string;
   level: string;
   method: string;
-  pricePerHour: number;
-  availableDays: string[];
+  hourlyRate: number;
+  daysAvailable: string[];
   credentials?: string;
-  maxStudents?: number;
-  packages?: string[];
+  maxStudents?: string;
+  packages?: string;
   videoUrl?: string;
   uid: string;
 }

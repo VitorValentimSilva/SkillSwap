@@ -32,7 +32,7 @@ export default function Input({ name, label, ...props }: Props) {
       if (month) formatted += `/${month}`;
       if (year) formatted += `/${year}`;
       setValue(name, formatted);
-    } else if (name === "pricePerHour") {
+    } else if (name === "hourlyRate") {
       const num = text.replace(/[^0-9]/g, "");
       onChange(num === "" ? undefined : Number(num));
       trigger(name);
@@ -61,7 +61,7 @@ export default function Input({ name, label, ...props }: Props) {
         onBlur={onBlur}
         maxLength={name === "data" ? 10 : undefined}
         keyboardType={
-          name === "pricePerHour" ? "decimal-pad" : props.keyboardType
+          name === "hourlyRate" ? "decimal-pad" : props.keyboardType
         }
         placeholder={props.placeholder}
         placeholderTextColor={

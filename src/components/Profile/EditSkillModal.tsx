@@ -1,5 +1,12 @@
-import React, { useContext, useEffect } from "react";
-import { Modal, View, Text, TouchableOpacity, ScrollView } from "react-native";
+import React, { useContext, useEffect, useState } from "react";
+import {
+  Modal,
+  View,
+  Text,
+  TouchableOpacity,
+  ScrollView,
+  ActivityIndicator,
+} from "react-native";
 import { ThemeContext } from "../../contexts/ThemeContext";
 import { Skill } from "../../types/skill";
 import SelectInput from "../Form/SelectInput";
@@ -7,14 +14,20 @@ import { FILTER_OPTIONS_AS_SELECT } from "../../utils/constants";
 import { FormProvider, useForm } from "react-hook-form";
 import Input from "../Form/Input";
 import { Ionicons } from "@expo/vector-icons";
-import { daysOfWeek } from "../Form/TeachSkill/StepTwoTeachSkill";
 import { colors } from "../../styles/colors";
 import VideoInput from "../Form/VideoInput";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  TeachSkillFormData,
+  teachSkillSchema,
+} from "../../schemas/teachSkillSchema";
+import { useToggleArray } from "../../hooks/useToggleArray";
+import { daysOfWeek } from "../../utils/constants";
 
 interface EditSkillModalProps {
   visible: boolean;
   skill: Skill | null;
-  onSave: (updated: Partial<Skill>) => void;
+  onSave: (updated: TeachSkillFormData) => void;
   onCancel: () => void;
 }
 
@@ -25,19 +38,21 @@ export default function EditSkillModal({
   onCancel,
 }: EditSkillModalProps) {
   const { isDark } = useContext(ThemeContext);
+  const [isSaving, setIsSaving] = useState(false);
+  const { items: selectedDays, toggle, setItems } = useToggleArray<string>([]);
 
-  const methods = useForm<Skill>({
+  const methods = useForm<TeachSkillFormData>({
+    resolver: zodResolver(teachSkillSchema),
     defaultValues: {
       title: "",
-      description: "",
       category: "",
       level: "",
       method: "",
-      pricePerHour: 0,
-      availableDays: [],
+      hourlyRate: 0,
+      daysAvailable: [],
       credentials: "",
       videoUrl: "",
-      maxStudents: 0,
+      maxStudents: "",
       packages: undefined,
     },
   });
@@ -59,43 +74,24 @@ export default function EditSkillModal({
         category: skill.category,
         level: skill.level,
         method: skill.method,
-        pricePerHour: skill.pricePerHour,
-        availableDays: skill.availableDays,
+        hourlyRate: skill.hourlyRate,
+        daysAvailable: skill.daysAvailable,
         credentials: skill.credentials || "",
         videoUrl: skill.videoUrl || "",
-        maxStudents: skill.maxStudents,
-        packages: skill.packages,
+        maxStudents:
+          skill.maxStudents !== undefined ? String(skill.maxStudents) : "",
+        packages: Array.isArray(skill.packages)
+          ? skill.packages.join(", ")
+          : skill.packages || "",
       });
+      setItems(skill.daysAvailable);
     }
-  }, [skill, reset]);
+  }, [skill, reset, setItems]);
 
-  const selectedDays = watch("availableDays") || [];
-
-  const toggleDay = (day: string) => {
-    const currentDays = watch("availableDays") || [];
-    const exists = currentDays.includes(day);
-    const updated = exists
-      ? currentDays.filter((d) => d !== day)
-      : [...currentDays, day];
-    setValue("availableDays", updated, { shouldValidate: true });
-    trigger("availableDays");
-  };
-
-  const onSubmit = (data: Skill) => {
-    onSave({
-      title: data.title,
-      description: data.description,
-      category: data.category,
-      level: data.level,
-      method: data.method,
-      pricePerHour: Number(data.pricePerHour),
-      availableDays: data.availableDays,
-      credentials: data.credentials,
-      videoUrl: data.videoUrl,
-      maxStudents: Number(data.maxStudents),
-      packages: data.packages,
-    });
-  };
+  useEffect(() => {
+    setValue("daysAvailable", selectedDays, { shouldValidate: true });
+    trigger("daysAvailable");
+  }, [selectedDays, setValue, trigger]);
 
   return (
     <Modal transparent animationType="slide" visible={visible}>
@@ -143,7 +139,8 @@ export default function EditSkillModal({
                 name="maxStudents"
                 label="Máximo de Alunos"
                 placeholder="Ex: Máximo de 8 alunos para aulas em grupo"
-                keyboardType="numeric"
+                multiline
+                numberOfLines={4}
               />
 
               <Input
@@ -155,8 +152,8 @@ export default function EditSkillModal({
               />
 
               <Input
-                name="pricePerHour"
-                label="Preço por Hora"
+                name="hourlyRate"
+                label="Preço por Hora *"
                 placeholder="Ex: 50"
                 keyboardType="numeric"
               />
@@ -178,14 +175,13 @@ export default function EditSkillModal({
               >
                 Dias disponíveis *
               </Text>
-
               <View className="flex-row flex-wrap mb-4 gap-2">
                 {daysOfWeek.map((day) => {
                   const selected = selectedDays.includes(day);
                   return (
                     <TouchableOpacity
                       key={day}
-                      onPress={() => toggleDay(day)}
+                      onPress={() => toggle(day)}
                       className={`flex-row items-center px-4 py-2 border rounded-full ${
                         selected
                           ? isDark
@@ -220,9 +216,9 @@ export default function EditSkillModal({
                     </TouchableOpacity>
                   );
                 })}
-                {errors.availableDays && (
+                {errors.daysAvailable && (
                   <Text className="text-ErrorColor">
-                    {errors.availableDays.message}
+                    {errors.daysAvailable.message}
                   </Text>
                 )}
               </View>
@@ -255,11 +251,44 @@ export default function EditSkillModal({
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
-                onPress={handleSubmit(onSubmit)}
-                className={`px-8 py-2 rounded-full
-                 ${isDark ? "bg-PrimaryColorDarkTheme" : "bg-PrimaryColorLightTheme"}`}
+                disabled={isSaving}
+                onPress={handleSubmit(
+                  async (data) => {
+                    try {
+                      setIsSaving(true);
+                      onSave(data);
+                    } finally {
+                      setIsSaving(false);
+                    }
+                  },
+                  (errors) => {
+                    console.log("Form errors:", errors);
+                  }
+                )}
+                className={`px-8 py-2 rounded-full flex-row justify-center items-center
+                ${isDark ? "bg-PrimaryColorDarkTheme" : "bg-PrimaryColorLightTheme"}
+                ${isSaving ? "opacity-50" : ""}`}
               >
-                <Text className="text-TextPrimaryColorDarkTheme">Salvar</Text>
+                {isSaving ? (
+                  <ActivityIndicator
+                    size="small"
+                    color={
+                      isDark
+                        ? colors.TextPrimaryColorDarkTheme
+                        : colors.TextPrimaryColorLightTheme
+                    }
+                  />
+                ) : (
+                  <Text
+                    className={`text-base font-semibold ${
+                      isDark
+                        ? "text-TextPrimaryColorDarkTheme"
+                        : "text-TextPrimaryColorLightTheme"
+                    }`}
+                  >
+                    Salvar
+                  </Text>
+                )}
               </TouchableOpacity>
             </View>
           </View>

@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import { useFormContext } from "react-hook-form";
 import { Ionicons } from "@expo/vector-icons";
@@ -7,16 +7,8 @@ import { ThemeContext } from "../../../contexts/ThemeContext";
 import Input from "../Input";
 import { colors } from "../../../styles/colors";
 import AppButton from "./AppButton";
-
-export const daysOfWeek = [
-  "Domingo",
-  "Segunda",
-  "Terça",
-  "Quarta",
-  "Quinta",
-  "Sexta",
-  "Sábado",
-];
+import { useToggleArray } from "../../../hooks/useToggleArray";
+import { daysOfWeek } from "../../../utils/constants";
 
 export interface StepTwoTeachSkillProps {
   onNext: () => void;
@@ -28,25 +20,24 @@ export default function StepTwoTeachSkill({
   onBack,
 }: StepTwoTeachSkillProps) {
   const {
-    watch,
     setValue,
     trigger,
     formState: { errors },
   } = useFormContext<TeachSkillFormData>();
-  const selectedDays = watch("daysAvailable") || [];
   const { isDark } = useContext(ThemeContext);
+  const { items: selectedDays, toggle, setItems } = useToggleArray<string>([]);
 
-  const toggleDay = (day: string) => {
-    const exists = selectedDays.includes(day);
-    const updated = exists
-      ? selectedDays.filter((d) => d !== day)
-      : [...selectedDays, day];
-    setValue("daysAvailable", updated, {
+  useEffect(() => {
+    trigger("daysAvailable");
+  }, []);
+
+  useEffect(() => {
+    setValue("daysAvailable", selectedDays, {
       shouldValidate: true,
-      shouldDirty: true,
       shouldTouch: true,
+      shouldDirty: true,
     });
-  };
+  }, [selectedDays, setValue]);
 
   return (
     <View>
@@ -80,20 +71,16 @@ export default function StepTwoTeachSkill({
           return (
             <TouchableOpacity
               key={day}
-              onPress={() => toggleDay(day)}
-              className={`
-                flex-row items-center mr-2 mb-2
-                px-4 py-2 border rounded-full
-                ${
-                  selected
-                    ? isDark
-                      ? "bg-SecondaryColorDarkTheme border-SecondaryColorDarkTheme"
-                      : "bg-SecondaryColorLightTheme border-SecondaryColorLightTheme"
-                    : isDark
-                      ? "bg-SurfaceColorDarkTheme border-SurfaceColorDarkTheme"
-                      : "bg-SurfaceColorLightTheme border-SurfaceColorLightTheme"
-                }
-              `}
+              onPress={() => toggle(day)}
+              className={`flex-row items-center px-4 py-2 border rounded-full ${
+                selected
+                  ? isDark
+                    ? "bg-SecondaryColorDarkTheme border-SecondaryColorDarkTheme"
+                    : "bg-SecondaryColorLightTheme border-SecondaryColorLightTheme"
+                  : isDark
+                    ? "bg-SurfaceColorDarkTheme border-SurfaceColorDarkTheme"
+                    : "bg-SurfaceColorLightTheme border-SurfaceColorLightTheme"
+              }`}
             >
               {selected && (
                 <Ionicons
@@ -108,17 +95,17 @@ export default function StepTwoTeachSkill({
                 />
               )}
               <Text
-                className={`
-                  text-sm
-                  ${isDark ? "text-TextPrimaryColorDarkTheme" : "text-TextPrimaryColorLightTheme"}
-                `}
+                className={`text-sm ${
+                  isDark
+                    ? "text-TextPrimaryColorDarkTheme"
+                    : "text-TextPrimaryColorLightTheme"
+                }`}
               >
                 {day}
               </Text>
             </TouchableOpacity>
           );
         })}
-
         {errors.daysAvailable && (
           <Text className="text-ErrorColor">
             {errors.daysAvailable.message}

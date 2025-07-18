@@ -5,6 +5,7 @@ import { AuthProvider } from "./contexts/AuthContext";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { ProfileProvider } from "./contexts/ProfileContext";
 import { TeachSkillProvider } from "./contexts/TeachSkillContext";
+import { EditSkillProvider } from "./contexts/EditSkillContext";
 
 export default function App() {
   return (
@@ -12,7 +13,9 @@ export default function App() {
       <ThemeProvider>
         <ProfileProvider>
           <TeachSkillProvider>
-            <Routes />
+            <EditSkillProvider>
+              <Routes />
+            </EditSkillProvider>
           </TeachSkillProvider>
         </ProfileProvider>
       </ThemeProvider>
