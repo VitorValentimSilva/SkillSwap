@@ -87,7 +87,10 @@ export default function MySkill({ maxItems }: MySkillProps) {
         renderItem={({ item }) => (
           <MySkillDisplayCard
             {...item}
-            onDelete={() => removeSkill(item).then(loadSkills)}
+            onDelete={() => {
+              setSkillToDelete(item);
+              setConfirmVisible(true);
+            }}
             onEdit={() => openForEdit(item)}
           />
         )}

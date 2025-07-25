@@ -60,7 +60,6 @@ export default function EditSkillModal({
   const {
     reset,
     handleSubmit,
-    watch,
     setValue,
     trigger,
     formState: { errors },
@@ -250,13 +249,16 @@ export default function EditSkillModal({
                   Cancelar
                 </Text>
               </TouchableOpacity>
+
               <TouchableOpacity
                 disabled={isSaving}
                 onPress={handleSubmit(
                   async (data) => {
+                    setIsSaving(true);
                     try {
-                      setIsSaving(true);
-                      onSave(data);
+                      await onSave(data);
+                    } catch (e) {
+                      console.error("Erro ao salvar edição:", e);
                     } finally {
                       setIsSaving(false);
                     }
@@ -265,9 +267,11 @@ export default function EditSkillModal({
                     console.log("Form errors:", errors);
                   }
                 )}
-                className={`px-8 py-2 rounded-full flex-row justify-center items-center
+                className={`
+                px-8 py-2 rounded-full flex-row justify-center items-center
                 ${isDark ? "bg-PrimaryColorDarkTheme" : "bg-PrimaryColorLightTheme"}
-                ${isSaving ? "opacity-50" : ""}`}
+                ${isSaving ? "opacity-50" : ""}
+                `}
               >
                 {isSaving ? (
                   <ActivityIndicator

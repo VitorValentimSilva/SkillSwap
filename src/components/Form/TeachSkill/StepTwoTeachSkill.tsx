@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import { useFormContext } from "react-hook-form";
 import { Ionicons } from "@expo/vector-icons";
@@ -7,7 +7,6 @@ import { ThemeContext } from "../../../contexts/ThemeContext";
 import Input from "../Input";
 import { colors } from "../../../styles/colors";
 import AppButton from "./AppButton";
-import { useToggleArray } from "../../../hooks/useToggleArray";
 import { daysOfWeek } from "../../../utils/constants";
 
 export interface StepTwoTeachSkillProps {
@@ -20,24 +19,26 @@ export default function StepTwoTeachSkill({
   onBack,
 }: StepTwoTeachSkillProps) {
   const {
+    watch,
     setValue,
     trigger,
     formState: { errors },
   } = useFormContext<TeachSkillFormData>();
   const { isDark } = useContext(ThemeContext);
-  const { items: selectedDays, toggle, setItems } = useToggleArray<string>([]);
+  const selectedDays = watch("daysAvailable") as string[];
 
-  useEffect(() => {
-    trigger("daysAvailable");
-  }, []);
+  const toggleDay = (day: string) => {
+    const exists = selectedDays.includes(day);
+    const updated = exists
+      ? selectedDays.filter((d) => d !== day)
+      : [...selectedDays, day];
 
-  useEffect(() => {
-    setValue("daysAvailable", selectedDays, {
+    setValue("daysAvailable", updated, {
       shouldValidate: true,
       shouldTouch: true,
       shouldDirty: true,
     });
-  }, [selectedDays, setValue]);
+  };
 
   return (
     <View>
@@ -71,7 +72,7 @@ export default function StepTwoTeachSkill({
           return (
             <TouchableOpacity
               key={day}
-              onPress={() => toggle(day)}
+              onPress={() => toggleDay(day)}
               className={`flex-row items-center px-4 py-2 border rounded-full ${
                 selected
                   ? isDark
