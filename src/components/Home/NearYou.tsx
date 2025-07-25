@@ -17,7 +17,7 @@ export default function NearYou() {
   const { isDark } = useContext(ThemeContext);
   const { nearbySkills, loading, error } = useNearbySkillsByCity();
   const [selectedSkill, setSelectedSkill] = useState<Skill | null>(null);
-  const limit = 1;
+  const limit = 6;
   const [showAll] = useState(false);
   const displayed = showAll ? nearbySkills : nearbySkills.slice(0, limit);
 
