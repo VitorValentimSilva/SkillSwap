@@ -7,8 +7,8 @@ import {
   TouchableWithoutFeedback,
   ActivityIndicator,
 } from "react-native";
-import { ThemeContext } from "../../contexts/ThemeContext";
-import { colors } from "../../styles/colors";
+import { ThemeContext } from "../../../contexts/ThemeContext";
+import { colors } from "../../../styles/colors";
 
 interface ConfirmDeleteModalProps {
   visible: boolean;

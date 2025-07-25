@@ -5,8 +5,8 @@ import TopScreen from "../components/Profile/TopScreen";
 import ImgProfile from "../components/Profile/ImgProfile";
 import InitialInformation from "../components/Profile/InitialInformation";
 import { ThemeContext } from "../contexts/ThemeContext";
-import MySkill from "../components/Profile/MySkill";
-import AllSkillsModal from "../components/Profile/AllSkillsModal";
+import MySkill from "../components/Profile/Skill/MySkill";
+import AllSkillsModal from "../components/Profile/Skill/AllSkillsModal";
 
 export default function Profile() {
   const { isDark } = useContext(ThemeContext);

@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { Modal, SafeAreaView, View, Pressable, Text } from "react-native";
-import MySkill from "../Profile/MySkill";
-import { ThemeContext } from "../../contexts/ThemeContext";
+import { ThemeContext } from "../../../contexts/ThemeContext";
+import MySkill from "./MySkill";
 
 interface AllSkillsModalProps {
   visible: boolean;

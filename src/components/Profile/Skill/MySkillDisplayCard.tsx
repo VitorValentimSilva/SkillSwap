@@ -1,9 +1,9 @@
 import { useContext } from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
-import { ThemeContext } from "../../contexts/ThemeContext";
-import { Skill } from "../../types/skill";
 import { Ionicons } from "@expo/vector-icons";
-import { colors } from "../../styles/colors";
+import { Skill } from "../../../types/skill";
+import { ThemeContext } from "../../../contexts/ThemeContext";
+import { colors } from "../../../styles/colors";
 
 interface MySkillDisplayCardProps extends Skill {
   onEdit?: () => void;

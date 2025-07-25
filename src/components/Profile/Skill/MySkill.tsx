@@ -2,17 +2,17 @@ import React, { useContext, useState } from "react";
 import { FlatList, Text, ActivityIndicator } from "react-native";
 import { getAuth } from "firebase/auth";
 import { useFocusEffect } from "@react-navigation/native";
-import { ThemeContext } from "../../contexts/ThemeContext";
-import { deleteSkill } from "../../services/skillService";
+import { ThemeContext } from "../../../contexts/ThemeContext";
+import { deleteSkill } from "../../../services/skillService";
 import ConfirmDeleteModal from "./ConfirmDeleteModal";
-import MySkillDisplayCard from "./MySkillDisplayCard";
-import { colors } from "../../styles/colors";
-import { Skill } from "../../types/skill";
-import { unpinVideoFromIPFS } from "../../services/pinFileToIPFS";
+import { colors } from "../../../styles/colors";
+import { Skill } from "../../../types/skill";
+import { unpinVideoFromIPFS } from "../../../services/pinFileToIPFS";
 import EditSkillModal from "./EditSkillModal";
-import { useEditSkill } from "../../hooks/useEditSkill";
-import { EditSkillContext } from "../../contexts/EditSkillContext";
-import { useSkills } from "../../hooks/useSkills";
+import { useEditSkill } from "../../../hooks/useEditSkill";
+import { EditSkillContext } from "../../../contexts/EditSkillContext";
+import { useSkills } from "../../../hooks/useSkills";
+import MySkillDisplayCard from "./MySkillDisplayCard";
 
 interface MySkillProps {
   maxItems?: number;

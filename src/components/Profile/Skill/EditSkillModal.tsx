@@ -7,22 +7,21 @@ import {
   ScrollView,
   ActivityIndicator,
 } from "react-native";
-import { ThemeContext } from "../../contexts/ThemeContext";
-import { Skill } from "../../types/skill";
-import SelectInput from "../Form/SelectInput";
-import { FILTER_OPTIONS_AS_SELECT } from "../../utils/constants";
 import { FormProvider, useForm } from "react-hook-form";
-import Input from "../Form/Input";
 import { Ionicons } from "@expo/vector-icons";
-import { colors } from "../../styles/colors";
-import VideoInput from "../Form/VideoInput";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Skill } from "../../../types/skill";
 import {
   TeachSkillFormData,
   teachSkillSchema,
-} from "../../schemas/teachSkillSchema";
-import { useToggleArray } from "../../hooks/useToggleArray";
-import { daysOfWeek } from "../../utils/constants";
+} from "../../../schemas/teachSkillSchema";
+import { ThemeContext } from "../../../contexts/ThemeContext";
+import { useToggleArray } from "../../../hooks/useToggleArray";
+import Input from "../../Form/Input";
+import SelectInput from "../../Form/SelectInput";
+import { daysOfWeek, FILTER_OPTIONS_AS_SELECT } from "../../../utils/constants";
+import { colors } from "../../../styles/colors";
+import VideoInput from "../../Form/VideoInput";
 
 interface EditSkillModalProps {
   visible: boolean;
