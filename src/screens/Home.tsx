@@ -2,13 +2,13 @@ import { SafeAreaView, View, ScrollView } from "react-native";
 import Header from "../components/Header";
 import { useContext } from "react";
 import { ThemeContext } from "../contexts/ThemeContext";
-import HomeButtonComponent from "../components/HomeButtonComponent";
+import HomeButtonComponent from "../components/Home/HomeButtonComponent";
 import CategoryComponent from "../components/Category/CategoryComponent";
 import { useNavigation } from "@react-navigation/native";
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import { TabParamList } from "../types/tabParamList";
-import NearYou from "../components/NearYou";
-import HomeTitle from "../components/HomeTitle";
+import NearYou from "../components/Home/NearYou";
+import HomeTitle from "../components/Home/HomeTitle";
 
 export default function Home() {
   const { isDark } = useContext(ThemeContext);

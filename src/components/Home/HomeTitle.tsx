@@ -1,5 +1,5 @@
 import { Pressable, Text, View } from "react-native";
-import { ThemeContext } from "../contexts/ThemeContext";
+import { ThemeContext } from "../../contexts/ThemeContext";
 import { useContext } from "react";
 
 interface HomeTitleProps {

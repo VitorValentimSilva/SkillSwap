@@ -6,17 +6,20 @@ import {
   ScrollView,
   TouchableOpacity,
 } from "react-native";
-import { ThemeContext } from "../contexts/ThemeContext";
-import SkillDisplayCard from "../components/List/SkillDisplayCard";
-import { colors } from "../styles/colors";
-import { useNearbySkillsByCity } from "../hooks/useNearbySkillsByCity";
-import ModalSkillCard from "./List/ModalSkillCard";
-import { Skill } from "../types/skill";
+import { ThemeContext } from "../../contexts/ThemeContext";
+import SkillDisplayCard from "../List/SkillDisplayCard";
+import { colors } from "../../styles/colors";
+import { useNearbySkillsByCity } from "../../hooks/useNearbySkillsByCity";
+import ModalSkillCard from "../List/ModalSkillCard";
+import { Skill } from "../../types/skill";
 
 export default function NearYou() {
   const { isDark } = useContext(ThemeContext);
   const { nearbySkills, loading, error } = useNearbySkillsByCity();
   const [selectedSkill, setSelectedSkill] = useState<Skill | null>(null);
+  const limit = 1;
+  const [showAll] = useState(false);
+  const displayed = showAll ? nearbySkills : nearbySkills.slice(0, limit);
 
   if (loading) {
     return (
@@ -58,7 +61,7 @@ export default function NearYou() {
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{ paddingLeft: 16, gap: 16, paddingTop: 5 }}
       >
-        {nearbySkills.map((skill, index) => (
+        {displayed.map((skill, index) => (
           <TouchableOpacity
             key={index}
             onPress={() => setSelectedSkill(skill)}

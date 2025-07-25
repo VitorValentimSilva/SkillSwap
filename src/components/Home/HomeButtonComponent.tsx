@@ -7,8 +7,8 @@ import {
   ViewStyle,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { ThemeContext } from "../contexts/ThemeContext";
-import { colors } from "../styles/colors";
+import { ThemeContext } from "../../contexts/ThemeContext";
+import { colors } from "../../styles/colors";
 
 type HomeButtonComponentProps = {
   mode: "learn" | "teach";
