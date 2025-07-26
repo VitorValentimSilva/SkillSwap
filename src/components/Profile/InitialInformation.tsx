@@ -30,7 +30,13 @@ export default function InitialInformation() {
         {profile.fullName}
       </Text>
 
-      <View className="flex-row items-center mt-1">
+      <Text
+        className={`text-base font-semibold text-center ${isDark ? "text-PrimaryColorDarkTheme" : "text-PrimaryColorLightTheme"}`}
+      >
+        @{profile.userName}
+      </Text>
+
+      <View className="flex-row items-center mt-2">
         <Ionicons
           name="location-outline"
           size={16}

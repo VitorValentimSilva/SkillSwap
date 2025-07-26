@@ -26,7 +26,11 @@ export const CreateAccount = ({ navigation }: Props) => {
       await signUp(values.email, values.password);
       navigation.navigate("CreateProfile");
     } catch (error: any) {
-      Alert.alert("Erro no cadastro", error.message);
+      if (error.code === "auth/email-already-in-use") {
+        Alert.alert("Erro no cadastro", "Este e-mail já está em uso.");
+      } else {
+        Alert.alert("Erro no cadastro", "Ocorreu um erro. Tente novamente.");
+      }
     }
   };
 
