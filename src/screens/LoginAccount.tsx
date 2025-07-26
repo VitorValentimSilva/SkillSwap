@@ -1,5 +1,14 @@
 import React, { useContext } from "react";
-import { View, Alert } from "react-native";
+import {
+  View,
+  Alert,
+  Image,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  Text,
+  Pressable,
+} from "react-native";
 import FormAuth from "../components/Form/FormAuth";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { useAuth } from "../contexts/AuthContext";
@@ -31,15 +40,37 @@ export const LoginAccount = ({ navigation }: Props) => {
   };
 
   return (
-    <View
-      className={`flex-1 justify-center items-center p-4
-      ${isDark ? "bg-BackgroundDarkTheme" : "bg-BackgroundLightTheme"}`}
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      className={`flex-1 px-5 pt-12 ${isDark ? "bg-BackgroundDarkTheme" : "bg-BackgroundLightTheme"}`}
+      enabled
     >
-      <FormAuth
-        isSignUp={false}
-        onSubmit={handleSubmit}
-        onSwitchMode={() => navigation.navigate("CreateAccount")}
-      />
-    </View>
+      <ScrollView keyboardShouldPersistTaps="handled">
+        <View className="items-center">
+          <Image
+            source={require("../assets/logo.png")}
+            className="w-60 h-60"
+            resizeMode="contain"
+          />
+        </View>
+
+        <View>
+          <FormAuth
+            isSignUp={false}
+            onSubmit={handleSubmit}
+            onSwitchMode={() => navigation.navigate("CreateAccount")}
+          />
+        </View>
+
+        <Pressable>
+          <Text
+            className={`text-center text-base mt-5
+            ${isDark ? "text-SecondaryColorDarkTheme" : "text-SecondaryColorLightTheme"}`}
+          >
+            Esqueceu sua senha?
+          </Text>
+        </Pressable>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };

@@ -1,5 +1,13 @@
 import React, { useContext } from "react";
-import { View, Alert } from "react-native";
+import {
+  View,
+  Alert,
+  Image,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  Text,
+} from "react-native";
 import FormAuth from "../components/Form/FormAuth";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { useAuth } from "../contexts/AuthContext";
@@ -23,15 +31,36 @@ export const CreateAccount = ({ navigation }: Props) => {
   };
 
   return (
-    <View
-      className={`flex-1 justify-center items-center p-4
-      ${isDark ? "bg-BackgroundDarkTheme" : "bg-BackgroundLightTheme"}`}
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      className={`flex-1 px-5 pt-12 ${isDark ? "bg-BackgroundDarkTheme" : "bg-BackgroundLightTheme"}`}
+      enabled
     >
-      <FormAuth
-        isSignUp={true}
-        onSubmit={handleSubmit}
-        onSwitchMode={() => navigation.navigate("LoginAccount")}
-      />
-    </View>
+      <ScrollView keyboardShouldPersistTaps="handled">
+        <View className="items-center">
+          <Image
+            source={require("../assets/logo.png")}
+            className="w-60 h-60"
+            resizeMode="contain"
+          />
+        </View>
+
+        <View>
+          <FormAuth
+            isSignUp={true}
+            onSubmit={handleSubmit}
+            onSwitchMode={() => navigation.navigate("LoginAccount")}
+          />
+        </View>
+
+        <Text
+          className={`text-center text-sm mt-4
+          ${isDark ? "text-TextSecondaryColorDarkTheme" : "text-TextSecondaryColorLightTheme"}`}
+        >
+          Ao criar uma conta você concorda com nossos Termos e Política de
+          Privacidade
+        </Text>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };

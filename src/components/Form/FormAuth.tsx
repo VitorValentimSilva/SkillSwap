@@ -34,9 +34,16 @@ export default function FormAuth({ isSignUp, onSubmit, onSwitchMode }: Props) {
   return (
     <FormProvider {...methods}>
       <View
-        className={`p-5 space-y-4 rounded-2xl w-full
-        ${isDark ? "bg-SurfaceColorDarkTheme" : "bg-SurfaceColorLightTheme"}`}
+        className={`w-full px-5 py-4 rounded-2xl
+          ${isDark ? "bg-SurfaceColorDarkTheme" : "bg-SurfaceColorLightTheme"}`}
       >
+        <Text
+          className={`text-3xl font-bold mb-6 text-center
+          ${isDark ? "text-TextPrimaryColorDarkTheme" : "text-TextPrimaryColorLightTheme"}`}
+        >
+          {isSignUp ? "Criar Nova Conta" : "Bem-vindo de Volta"}
+        </Text>
+
         <Input
           name="email"
           label="E-mail"
@@ -64,30 +71,27 @@ export default function FormAuth({ isSignUp, onSubmit, onSwitchMode }: Props) {
           />
         )}
 
-        <View className="mt-4 gap-6">
-          <Pressable
-            onPress={handleSubmit(onSubmit)}
-            className={`p-3 rounded-md 
-              ${isDark ? "bg-PrimaryColorLightTheme" : "bg-PrimaryColorDarkTheme"}`}
-          >
+        <View className="mt-5">
+          <Pressable onPress={handleSubmit(onSubmit)}>
             <Text
-              className={`text-center font-semibold
+              className={`text-base font-semibold
               ${isDark ? "text-TextPrimaryColorDarkTheme" : "text-TextPrimaryColorLightTheme"}`}
             >
               {isSignUp ? "Criar Conta" : "Entrar"}
             </Text>
           </Pressable>
 
-          <Pressable
-            onPress={onSwitchMode}
-            className={`p-3 rounded-md
-              ${isDark ? "bg-TextSecondaryColorLightTheme" : "bg-TextSecondaryColorDarkTheme"}`}
-          >
+          <View
+            className={`flex-row items-center justify-center my-3 border-t
+            ${isDark ? "border-TextSecondaryColorDarkTheme" : "border-TextSecondaryColorLightTheme"}`}
+          ></View>
+
+          <Pressable onPress={onSwitchMode}>
             <Text
-              className={`text-center font-semibold
-              ${isDark ? "text-TextPrimaryColorDarkTheme" : "text-TextPrimaryColorLightTheme"}`}
+              className={`text-base font-semibold
+              ${isDark ? "text-PrimaryColorDarkTheme" : "text-primaryColorLightTheme"}`}
             >
-              {isSignUp ? "Já tem conta? Faça login" : "Criar nova conta"}
+              {isSignUp ? "Já tem uma conta? Entrar" : "Criar nova conta"}
             </Text>
           </Pressable>
         </View>
