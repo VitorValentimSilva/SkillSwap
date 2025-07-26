@@ -7,6 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ProfileFormData, profileSchema } from "../../schemas/profileSchema";
 import { pickImage } from "../../utils/pickImage";
 import { PhoneNumberInput } from "./PhoneNumberInput";
+import { isUserNameTaken } from "../../hooks/useUserProfile";
 
 type FormProfileProps = {
   onSubmit: (data: ProfileFormData) => Promise<void>;
@@ -15,11 +16,13 @@ type FormProfileProps = {
 export default function FormProfile({ onSubmit }: FormProfileProps) {
   const { isDark } = useContext(ThemeContext);
   const [photoUri, setPhotoUri] = useState<string>("");
+  const [userNameTaken, setUserNameTaken] = useState(false);
 
   const methods = useForm<ProfileFormData>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
       photo: "",
+      userName: "",
       fullName: "",
       phone: "",
       address: "",
@@ -41,6 +44,31 @@ export default function FormProfile({ onSubmit }: FormProfileProps) {
       setPhotoUri(uri);
       setValue("photo", uri, { shouldValidate: true });
     }
+  };
+
+  const checkUserName = async (userName: string) => {
+    if (userName.length < 6) return;
+    const exists = await isUserNameTaken(userName);
+    setUserNameTaken(exists);
+    if (exists) {
+      methods.setError("userName", {
+        type: "manual",
+        message: "Este nome de usuário já está em uso",
+      });
+    }
+  };
+
+  const handleSubmitProfile = async (data: ProfileFormData) => {
+    const exists = await isUserNameTaken(data.userName.trim());
+    if (exists) {
+      methods.setError("userName", {
+        type: "manual",
+        message: "Este nome de usuário já está em uso",
+      });
+      return;
+    }
+
+    await onSubmit(data);
   };
 
   return (
@@ -87,6 +115,21 @@ export default function FormProfile({ onSubmit }: FormProfileProps) {
         </View>
 
         <Input
+          name="userName"
+          label="Nome de Usuário *"
+          placeholder="Digite seu nome de usuário"
+          onBlur={async (e) => {
+            const value = e.nativeEvent.text.trim();
+            await checkUserName(value);
+          }}
+        />
+        {userNameTaken && (
+          <Text className="text-ErrorColor mt-1">
+            Este nome de usuário já está em uso
+          </Text>
+        )}
+
+        <Input
           name="fullName"
           label="Nome Completo *"
           placeholder="Digite seu nome"
@@ -109,9 +152,9 @@ export default function FormProfile({ onSubmit }: FormProfileProps) {
         />
 
         <Pressable
-          onPress={handleSubmit(onSubmit)}
+          onPress={handleSubmit(handleSubmitProfile)}
           className={`p-3 rounded-md
-                      ${isDark ? "bg-PrimaryColorLightTheme" : "bg-PrimaryColorDarkTheme"}`}
+          ${isDark ? "bg-PrimaryColorLightTheme" : "bg-PrimaryColorDarkTheme"}`}
         >
           <Text
             className={`text-center font-semibold

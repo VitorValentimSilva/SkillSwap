@@ -1,5 +1,12 @@
 import { useEffect, useState } from "react";
-import { doc, getDoc } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  where,
+} from "firebase/firestore";
 import { db } from "../services/firebaseConfig";
 
 export function useUserProfile(uid: string | null | undefined) {
@@ -35,4 +42,13 @@ export function useUserProfile(uid: string | null | undefined) {
   }, [uid]);
 
   return { profile, loading };
+}
+
+export async function isUserNameTaken(userName: string): Promise<boolean> {
+  const q = query(
+    collection(db, "profiles"),
+    where("userName", "==", userName)
+  );
+  const snapshot = await getDocs(q);
+  return !snapshot.empty;
 }

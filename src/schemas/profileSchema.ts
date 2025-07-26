@@ -5,6 +5,13 @@ export const profileSchema = z.object({
     .string()
     .url("Selecione uma foto de perfil válida")
     .nonempty("Foto é obrigatória"),
+  userName: z
+    .string()
+    .min(6, "Nome de usuário deve ter pelo menos 6 caracteres")
+    .max(25, "Nome de usuário muito longo")
+    .refine((val) => !/\s/.test(val), {
+      message: "Nome de usuário não pode conter espaços",
+    }),
   fullName: z
     .string()
     .min(6, "Nome deve ter pelo menos 6 caracteres")
