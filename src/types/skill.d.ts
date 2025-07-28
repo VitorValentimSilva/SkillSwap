@@ -7,6 +7,10 @@ export interface Skill {
   method: string;
   hourlyRate: number;
   daysAvailable: string[];
+  timesAvailable: Array<{
+    day: string;
+    times: string[];
+  }>;
   credentials?: string;
   maxStudents?: string;
   packages?: string;

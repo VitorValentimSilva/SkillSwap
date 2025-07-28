@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { SafeAreaView, ScrollView, View, Text, Pressable } from "react-native";
+import { SafeAreaView, ScrollView, View } from "react-native";
 import Header from "../components/Header";
 import TopScreen from "../components/Profile/TopScreen";
 import ImgProfile from "../components/Profile/ImgProfile";
@@ -7,6 +7,7 @@ import InitialInformation from "../components/Profile/InitialInformation";
 import { ThemeContext } from "../contexts/ThemeContext";
 import MySkill from "../components/Profile/Skill/MySkill";
 import AllSkillsModal from "../components/Profile/Skill/AllSkillsModal";
+import HomeTitle from "../components/Home/HomeTitle";
 
 export default function Profile() {
   const { isDark } = useContext(ThemeContext);
@@ -35,26 +36,11 @@ export default function Profile() {
           <InitialInformation />
         </View>
 
-        <View className="px-5 pt-5">
-          <View className="flex-row items-center justify-between">
-            <Text
-              className={`text-xl font-bold ${
-                isDark
-                  ? "text-TextPrimaryColorDarkTheme"
-                  : "text-TextSecondaryColorLightTheme"
-              }`}
-            >
-              Minhas Habilidades
-            </Text>
-
-            <Pressable onPress={() => setShowAll(true)}>
-              <Text
-                className={`font-semibold ${isDark ? "text-PrimaryColorDarkTheme" : "text-PrimaryColorLightTheme"}`}
-              >
-                Ver Todas &gt;
-              </Text>
-            </Pressable>
-          </View>
+        <View className="pt-5">
+          <HomeTitle
+            titulo="Minhas Habilidades"
+            onPress={() => setShowAll(true)}
+          />
 
           <MySkill maxItems={2} />
         </View>

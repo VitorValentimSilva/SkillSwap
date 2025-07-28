@@ -23,6 +23,19 @@ export const teachSkillSchema = z.object({
     .refine((val) => !isNaN(val), "Valor por hora é obrigatório"),
   packages: z.string().optional(),
   daysAvailable: z.array(z.string()).min(1, "Selecione ao menos um dia"),
+  timesAvailable: z
+    .array(
+      z.object({
+        day: z.string(),
+        times: z.array(z.string()).min(1, "Adicione ao menos um horário"),
+      })
+    )
+    .refine((arr) => {
+      const days = arr.map((e) => e.day);
+      return (
+        arr.length > 0 && new Set(days).size === arr.length
+      );
+    }, "Horários devem ser configurados para cada dia selecionado"),
 
   // Etapa 3
   credentials: z.string().optional(),

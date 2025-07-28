@@ -83,7 +83,7 @@ export default function MySkill({ maxItems }: MySkillProps) {
         data={displayed}
         keyExtractor={(item) => item.id}
         scrollEnabled={maxItems == null}
-        contentContainerStyle={{ paddingTop: 10 }}
+        contentContainerStyle={{ paddingTop: 10, paddingHorizontal: 17 }}
         renderItem={({ item }) => (
           <MySkillDisplayCard
             {...item}

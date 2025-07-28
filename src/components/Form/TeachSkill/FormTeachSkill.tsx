@@ -30,6 +30,7 @@ export default function FormTeachSkill() {
       method: "",
       hourlyRate: 0,
       daysAvailable: [],
+      timesAvailable: [],
       credentials: "",
       videoUrl: "",
       maxStudents: "",

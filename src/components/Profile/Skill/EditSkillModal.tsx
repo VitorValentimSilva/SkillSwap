@@ -7,7 +7,7 @@ import {
   ScrollView,
   ActivityIndicator,
 } from "react-native";
-import { FormProvider, useForm } from "react-hook-form";
+import { FormProvider, useFieldArray, useForm } from "react-hook-form";
 import { Ionicons } from "@expo/vector-icons";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Skill } from "../../../types/skill";
@@ -16,7 +16,6 @@ import {
   teachSkillSchema,
 } from "../../../schemas/teachSkillSchema";
 import { ThemeContext } from "../../../contexts/ThemeContext";
-import { useToggleArray } from "../../../hooks/useToggleArray";
 import Input from "../../Form/Input";
 import SelectInput from "../../Form/SelectInput";
 import { daysOfWeek, FILTER_OPTIONS_AS_SELECT } from "../../../utils/constants";
@@ -38,7 +37,6 @@ export default function EditSkillModal({
 }: EditSkillModalProps) {
   const { isDark } = useContext(ThemeContext);
   const [isSaving, setIsSaving] = useState(false);
-  const { items: selectedDays, toggle, setItems } = useToggleArray<string>([]);
 
   const methods = useForm<TeachSkillFormData>({
     resolver: zodResolver(teachSkillSchema),
@@ -47,8 +45,10 @@ export default function EditSkillModal({
       category: "",
       level: "",
       method: "",
+      description: "",
       hourlyRate: 0,
       daysAvailable: [],
+      timesAvailable: [],
       credentials: "",
       videoUrl: "",
       maxStudents: "",
@@ -59,10 +59,18 @@ export default function EditSkillModal({
   const {
     reset,
     handleSubmit,
+    watch,
     setValue,
-    trigger,
+    control,
     formState: { errors },
   } = methods;
+
+  const selectedDays = watch("daysAvailable") as string[];
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "timesAvailable",
+  });
+  const [pickerIndex, setPickerIndex] = useState<number | null>(null);
 
   useEffect(() => {
     if (skill) {
@@ -74,6 +82,7 @@ export default function EditSkillModal({
         method: skill.method,
         hourlyRate: skill.hourlyRate,
         daysAvailable: skill.daysAvailable,
+        timesAvailable: skill.timesAvailable || [],
         credentials: skill.credentials || "",
         videoUrl: skill.videoUrl || "",
         maxStudents:
@@ -82,14 +91,36 @@ export default function EditSkillModal({
           ? skill.packages.join(", ")
           : skill.packages || "",
       });
-      setItems(skill.daysAvailable);
     }
-  }, [skill, reset, setItems]);
+  }, [skill, reset]);
 
   useEffect(() => {
-    setValue("daysAvailable", selectedDays, { shouldValidate: true });
-    trigger("daysAvailable");
-  }, [selectedDays, setValue, trigger]);
+    selectedDays.forEach((day) => {
+      if (!fields.find((f) => f.day === day)) {
+        append({ day, times: [] });
+      }
+    });
+    fields.forEach((f, idx) => {
+      if (!selectedDays.includes(f.day)) {
+        remove(idx);
+      }
+    });
+  }, [selectedDays]);
+
+  const openTimePicker = (index: number) => setPickerIndex(index);
+  const closeTimePicker = () => setPickerIndex(null);
+
+  const handleSaveTime = (time: string) => {
+    if (pickerIndex === null) return;
+    const dayTimes = fields[pickerIndex].times;
+    if (dayTimes.includes(time)) {
+      return closeTimePicker();
+    }
+    const updated = [...fields];
+    updated[pickerIndex].times.push(time);
+    setValue("timesAvailable", updated, { shouldValidate: true });
+    closeTimePicker();
+  };
 
   return (
     <Modal transparent animationType="slide" visible={visible}>
@@ -179,7 +210,17 @@ export default function EditSkillModal({
                   return (
                     <TouchableOpacity
                       key={day}
-                      onPress={() => toggle(day)}
+                      onPress={() => {
+                        const exists = selectedDays.includes(day);
+                        const updated = exists
+                          ? selectedDays.filter((d) => d !== day)
+                          : [...selectedDays, day];
+                        setValue("daysAvailable", updated, {
+                          shouldValidate: true,
+                          shouldTouch: true,
+                          shouldDirty: true,
+                        });
+                      }}
                       className={`flex-row items-center px-4 py-2 border rounded-full ${
                         selected
                           ? isDark
@@ -203,11 +244,7 @@ export default function EditSkillModal({
                         />
                       )}
                       <Text
-                        className={`text-sm ${
-                          isDark
-                            ? "text-TextPrimaryColorDarkTheme"
-                            : "text-TextPrimaryColorLightTheme"
-                        }`}
+                        className={`text-sm ${isDark ? "text-TextPrimaryColorDarkTheme" : "text-TextPrimaryColorLightTheme"}`}
                       >
                         {day}
                       </Text>
@@ -220,6 +257,87 @@ export default function EditSkillModal({
                   </Text>
                 )}
               </View>
+
+              <Text
+                className={`text-base font-semibold mb-2 ${
+                  isDark
+                    ? "text-TextPrimaryColorDarkTheme"
+                    : "text-TextPrimaryColorLightTheme"
+                }`}
+              >
+                Horários disponíveis *
+              </Text>
+
+              {fields.map((field, idx) => (
+                <View key={field.id} className="mb-4">
+                  <Text
+                    className={`font-semibold mb-2 ${
+                      isDark
+                        ? "text-TextPrimaryColorDarkTheme"
+                        : "text-TextPrimaryColorLightTheme"
+                    }`}
+                  >
+                    {field.day}
+                  </Text>
+                  <View className="flex-row flex-wrap gap-3 mb-3">
+                    {field.times.map((t, i) => (
+                      <View
+                        key={i}
+                        className={`flex-row items-center border rounded px-4 py-1 ${isDark ? "border-PrimaryColorDarkTheme" : "border-PrimaryColorLightTheme"}`}
+                      >
+                        <Text
+                          className={`mr-2 ${isDark ? "text-TextPrimaryColorDarkTheme" : "text-TextPrimaryColorLightTheme"}`}
+                        >
+                          {t}
+                        </Text>
+                        <TouchableOpacity
+                          onPress={() => {
+                            const updated = [...fields];
+                            updated[idx].times = updated[idx].times.filter(
+                              (_, j) => j !== i
+                            );
+                            setValue("timesAvailable", updated, {
+                              shouldValidate: true,
+                            });
+                          }}
+                        >
+                          <Text className="text-ErrorColor font-semibold">
+                            X
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
+                    ))}
+                  </View>
+                  <TouchableOpacity
+                    onPress={() => openTimePicker(idx)}
+                    className={`p-3 rounded ${isDark ? "bg-PrimaryColorDarkTheme" : "bg-PrimaryColorLightTheme"}`}
+                  >
+                    <Text
+                      className={`font-semibold text-center ${isDark ? "text-TextPrimaryColorDarkTheme" : "text-TextPrimaryColorLightTheme"}`}
+                    >
+                      Adicionar horário
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              ))}
+
+              {errors.timesAvailable && (
+                <View className="mb-4">
+                  {Array.isArray(errors.timesAvailable) &&
+                    (errors.timesAvailable as any).map((e: any, i: number) =>
+                      e?.times?.message ? (
+                        <Text key={i} className="text-ErrorColor">
+                          {fields[i].day}: {e.times.message}
+                        </Text>
+                      ) : null
+                    )}
+                  {(errors.timesAvailable as any)?.message && (
+                    <Text className="text-ErrorColor">
+                      {(errors.timesAvailable as any).message}
+                    </Text>
+                  )}
+                </View>
+              )}
 
               <Input
                 name="credentials"
