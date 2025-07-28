@@ -44,11 +44,15 @@ export function useUserProfile(uid: string | null | undefined) {
   return { profile, loading };
 }
 
-export async function isUserNameTaken(userName: string): Promise<boolean> {
+export async function isUserNameTaken(
+  userName: string,
+  currentUserId?: string
+): Promise<boolean> {
   const q = query(
     collection(db, "profiles"),
     where("userName", "==", userName)
   );
   const snapshot = await getDocs(q);
-  return !snapshot.empty;
+
+  return snapshot.docs.some((doc) => doc.id !== currentUserId);
 }

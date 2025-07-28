@@ -1,0 +1,267 @@
+import React, { useContext, useEffect, useState } from "react";
+import {
+  Modal,
+  View,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+  ActivityIndicator,
+  Image,
+} from "react-native";
+import { FormProvider, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { ThemeContext } from "../../contexts/ThemeContext";
+import { ProfileFormData, profileSchema } from "../../schemas/profileSchema";
+import Input from "../Form/Input";
+import { pickImage } from "../../utils/pickImage";
+import { PhoneNumberInput } from "../Form/PhoneNumberInput";
+import { Ionicons } from "@expo/vector-icons";
+import { colors } from "../../styles/colors";
+import { isUserNameTaken } from "../../hooks/useUserProfile";
+
+interface EditProfileModalProps {
+  visible: boolean;
+  initialData: ProfileFormData;
+  onSave: (data: ProfileFormData) => Promise<void>;
+  onCancel: () => void;
+  userId: string;
+}
+
+export default function EditProfileModal({
+  visible,
+  initialData,
+  onSave,
+  onCancel,
+  userId,
+}: EditProfileModalProps) {
+  const { isDark } = useContext(ThemeContext);
+  const [photoUri, setPhotoUri] = useState<string>(initialData.photo);
+  const [isSaving, setIsSaving] = useState(false);
+  const [userNameTaken, setUserNameTaken] = useState(false);
+
+  const checkUserName = async (userName: string) => {
+    if (userName.length < 6) return;
+    const exists = await isUserNameTaken(userName, userId);
+
+    setUserNameTaken(exists);
+    if (exists) {
+      methods.setError("userName", {
+        type: "manual",
+        message: "Este nome de usuário já está em uso",
+      });
+    }
+  };
+
+  const methods = useForm<ProfileFormData>({
+    resolver: zodResolver(profileSchema),
+    defaultValues: initialData,
+    mode: "onChange",
+  });
+
+  const {
+    handleSubmit,
+    reset,
+    setValue,
+    formState: { errors, isSubmitting, isDirty },
+  } = methods;
+
+  useEffect(() => {
+    reset(initialData);
+    setPhotoUri(initialData.photo);
+
+    setValue("phone", initialData.phone, { shouldValidate: true });
+  }, [initialData, reset, setValue]);
+
+  const handlePickPhoto = async () => {
+    const uri = await pickImage();
+    if (uri) {
+      setPhotoUri(uri);
+      setValue("photo", uri, { shouldValidate: true });
+    }
+  };
+
+  const submit = async (data: ProfileFormData) => {
+    setIsSaving(true);
+    try {
+      await onSave(data);
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  return (
+    <Modal transparent animationType="slide" visible={visible}>
+      <View className="flex-1 bg-black bg-opacity-30">
+        <View className="bg-white overflow-hidden flex-1">
+          <View
+            className={`flex-row justify-between items-center px-5 pt-2
+            ${isDark ? "bg-SurfaceColorDarkTheme" : "bg-SurfaceColorLightTheme"}`}
+          >
+            <Text
+              className={`text-3xl font-bold mb-4 ${
+                isDark
+                  ? "text-TextPrimaryColorDarkTheme"
+                  : "text-TextPrimaryColorLightTheme"
+              }`}
+            >
+              Editar Perfil
+            </Text>
+          </View>
+
+          <FormProvider {...methods}>
+            <ScrollView
+              contentContainerStyle={{ padding: 16 }}
+              className={`${isDark ? "bg-SurfaceColorDarkTheme" : "bg-SurfaceColorLightTheme"}`}
+            >
+              <View className="items-center mb-4">
+                {photoUri ? (
+                  <TouchableOpacity onPress={handlePickPhoto}>
+                    <Image
+                      source={{ uri: photoUri }}
+                      style={{ width: 100, height: 100, borderRadius: 50 }}
+                    />
+                  </TouchableOpacity>
+                ) : (
+                  <TouchableOpacity
+                    onPress={handlePickPhoto}
+                    className="bg-blue-500 p-3 rounded-full"
+                  >
+                    <Ionicons name="camera" size={24} color="#fff" />
+                  </TouchableOpacity>
+                )}
+                {errors.photo && (
+                  <Text className="text-ErrorColor mt-2">
+                    {errors.photo.message}
+                  </Text>
+                )}
+              </View>
+
+              <Input
+                name="userName"
+                label="Nome de Usuário *"
+                placeholder="Digite seu nome de usuário"
+                onBlur={async (e) => {
+                  const value = e.nativeEvent.text.trim();
+                  await checkUserName(value);
+                }}
+              />
+              {userNameTaken && (
+                <Text className="text-ErrorColor mt-1">
+                  Este nome de usuário já está em uso
+                </Text>
+              )}
+
+              <Input
+                name="fullName"
+                label="Nome Completo *"
+                placeholder="Digite seu nome"
+              />
+
+              <PhoneNumberInput name="phone" label="Telefone *" />
+
+              <Input
+                name="address"
+                label="Endereço *"
+                placeholder="Seu endereço"
+              />
+
+              <Input name="city" label="Cidade *" placeholder="Sua cidade" />
+
+              <Input name="country" label="País *" placeholder="Seu país" />
+
+              <Input
+                name="bio"
+                label="Bio *"
+                placeholder="Fale um pouco sobre você"
+                multiline
+                numberOfLines={5}
+              />
+
+              <Input
+                name="instagram"
+                label="Instagram"
+                placeholder="Digite seu arroba do Instagram"
+              />
+
+              <Input
+                name="gitHub"
+                label="GitHub"
+                placeholder="Digite seu arroba do Instagram"
+              />
+
+              <Input
+                name="linkedin"
+                label="LinkedIn"
+                placeholder="Digite seu arroba do Instagram"
+              />
+
+              <Input
+                name="twitter"
+                label="X (Twitter)"
+                placeholder="Digite seu arroba do Instagram"
+              />
+            </ScrollView>
+
+            <View
+              className={`flex-row justify-end space-x-4 p-4  gap-10
+                ${isDark ? "bg-SurfaceColorDarkTheme" : "bg-SurfaceColorLightTheme"}`}
+            >
+              <TouchableOpacity
+                onPress={onCancel}
+                className="px-4 py-2 rounded-full border"
+                style={{
+                  borderColor: isDark
+                    ? colors.PrimaryColorDarkTheme
+                    : colors.PrimaryColorLightTheme,
+                }}
+              >
+                <Text
+                  className={`${isDark ? "text-PrimaryColorDarkTheme" : "text-PrimaryColorLightTheme"}`}
+                >
+                  Cancelar
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                disabled={isSaving || isSubmitting || !isDirty}
+                onPress={handleSubmit(submit)}
+                className={`px-6 py-2 rounded-full flex-row justify-center items-center 
+                ${
+                  isDark
+                    ? "bg-PrimaryColorDarkTheme"
+                    : "bg-PrimaryColorLightTheme"
+                } 
+                ${isSaving ? "opacity-50" : ""}
+                ${
+                  isSaving || !isDirty
+                    ? "opacity-50 pointer-events-none bg-gray-300"
+                    : ""
+                }`}
+              >
+                {isSaving ? (
+                  <ActivityIndicator
+                    size="small"
+                    color={
+                      isDark
+                        ? colors.TextPrimaryColorDarkTheme
+                        : colors.TextPrimaryColorLightTheme
+                    }
+                  />
+                ) : (
+                  <Text
+                    className={`font-semibold ${
+                      isDark
+                        ? "text-TextPrimaryColorDarkTheme"
+                        : "text-TextPrimaryColorLightTheme"
+                    }`}
+                  >
+                    Salvar
+                  </Text>
+                )}
+              </TouchableOpacity>
+            </View>
+          </FormProvider>
+        </View>
+      </View>
+    </Modal>
+  );
+}

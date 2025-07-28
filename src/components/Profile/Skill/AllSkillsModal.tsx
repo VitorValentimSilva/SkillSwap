@@ -40,7 +40,7 @@ export default function AllSkillsModal({
           </Pressable>
         </View>
 
-        <View className="px-5 pt-2 pb-12">
+        <View className="pt-2 pb-12">
           <MySkill />
         </View>
       </SafeAreaView>

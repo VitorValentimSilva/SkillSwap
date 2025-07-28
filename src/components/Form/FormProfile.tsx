@@ -29,6 +29,10 @@ export default function FormProfile({ onSubmit }: FormProfileProps) {
       city: "",
       country: "",
       bio: "",
+      instagram: "",
+      gitHub: "",
+      linkedin: "",
+      twitter: "",
     },
   });
 

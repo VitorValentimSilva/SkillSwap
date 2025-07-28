@@ -25,11 +25,12 @@ export function PhoneNumberInput({ name, label }: Props) {
     <Controller
       control={control}
       name={name}
+      defaultValue={value || ""}
       rules={{
         required: "Telefone é obrigatório",
         validate: (v: string) => v.length >= 8 || "Telefone inválido",
       }}
-      render={({ field: { onChange } }) => (
+      render={({ field: { onChange, value: fieldValue } }) => (
         <View className="w-full mb-4">
           {label && (
             <Text
@@ -39,7 +40,7 @@ export function PhoneNumberInput({ name, label }: Props) {
             </Text>
           )}
           <PhoneInput
-            value={value}
+            value={fieldValue}
             defaultCountry="BR"
             selectedCountry={selectedCountry}
             onChangePhoneNumber={(num) => onChange(num)}

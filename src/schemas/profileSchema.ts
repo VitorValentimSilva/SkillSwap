@@ -21,6 +21,10 @@ export const profileSchema = z.object({
   city: z.string().min(2, "Cidade é obrigatória"),
   country: z.string().min(2, "País é obrigatório"),
   bio: z.string().min(12, "Conte um pouco sobre você (mínimo 12 caracteres)"),
+  instagram: z.string().optional(),
+  gitHub: z.string().optional(),
+  linkedin: z.string().optional(),
+  twitter: z.string().optional(),
 });
 
 export type ProfileFormData = z.infer<typeof profileSchema>;

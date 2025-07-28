@@ -89,7 +89,7 @@ export default function FormAuth({ isSignUp, onSubmit, onSwitchMode }: Props) {
           <Pressable onPress={onSwitchMode}>
             <Text
               className={`text-base font-semibold
-              ${isDark ? "text-PrimaryColorDarkTheme" : "text-primaryColorLightTheme"}`}
+              ${isDark ? "text-PrimaryColorDarkTheme" : "text-PrimaryColorLightTheme"}`}
             >
               {isSignUp ? "Já tem uma conta? Entrar" : "Criar nova conta"}
             </Text>

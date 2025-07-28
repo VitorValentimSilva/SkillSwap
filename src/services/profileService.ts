@@ -14,3 +14,12 @@ export async function createProfile(
   });
   return uid;
 }
+
+export async function updateProfile(
+  uid: string | undefined,
+  data: ProfileFormData
+) {
+  if (!uid) throw new Error("UID é obrigatório");
+  const ref = doc(db, "profiles", uid);
+  await setDoc(ref, data, { merge: true });
+}

@@ -7,7 +7,8 @@ import {
   TouchableWithoutFeedback,
 } from "react-native";
 import { ThemeContext } from "../../../contexts/ThemeContext";
-import Input from "../Input";
+import { TextInput } from "react-native";
+import { colors } from "../../../styles/colors";
 
 interface Props {
   visible: boolean;
@@ -46,7 +47,10 @@ export default function TimePickerModal({ visible, onSave, onCancel }: Props) {
       </TouchableWithoutFeedback>
 
       <View className="absolute inset-0 justify-center items-center">
-        <View className="bg-white w-[90%] p-4 rounded-lg shadow-lg">
+        <View
+          className={`w-[90%] p-4 rounded-lg shadow-lg
+          ${isDark ? "bg-SurfaceColorDarkTheme" : "bg-SurfaceColorLightTheme"}`}
+        >
           <Text
             className={`font-semibold mb-2
             ${isDark ? "text-TextPrimaryColorDarkTheme" : "text-TextPrimaryColorLightTheme"}`}
@@ -54,12 +58,17 @@ export default function TimePickerModal({ visible, onSave, onCancel }: Props) {
             Digite o horário (HH:MM):
           </Text>
 
-          <Input
-            name="time"
+          <TextInput
             value={formatted}
             onChangeText={handleChange}
             placeholder="Ex: 14:30"
-            className="border p-2 rounded mb-4"
+            className={`border p-2 rounded mb-4
+            ${isDark ? "border-TextPrimaryColorDarkTheme text-TextPrimaryColorDarkTheme" : "border-TextPrimaryColorLightTheme text-TextPrimaryColorLightTheme"}`}
+            placeholderTextColor={
+              isDark
+                ? colors.TextPrimaryColorDarkTheme
+                : colors.TextPrimaryColorLightTheme
+            }
             keyboardType="numeric"
             maxLength={5}
           />
