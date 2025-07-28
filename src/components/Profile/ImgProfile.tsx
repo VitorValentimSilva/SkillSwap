@@ -6,7 +6,7 @@ import {
   Alert,
 } from "react-native";
 import { useAuth } from "../../contexts/AuthContext";
-import { isUserNameTaken, useUserProfile } from "../../hooks/useUserProfile";
+import { useUserProfile } from "../../hooks/useUserProfile";
 import { ThemeContext } from "../../contexts/ThemeContext";
 import { useContext, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
@@ -28,22 +28,10 @@ export default function ImgProfile() {
     );
   }
 
-  if (!profile || !user) return null;
+  if (!profile) return null;
 
   const handleSave = async (updatedData: ProfileFormData) => {
     if (!user?.uid) return;
-
-    if (updatedData.userName.trim() !== profile.userName) {
-      const exists = await isUserNameTaken(
-        updatedData.userName.trim(),
-        user.uid
-      );
-
-      if (exists) {
-        Alert.alert("Erro", "Nome de usuário já em uso. Escolha outro.");
-        return;
-      }
-    }
 
     try {
       await updateProfile(user.uid, updatedData);
@@ -82,7 +70,6 @@ export default function ImgProfile() {
       <EditProfileModal
         visible={modalVisible}
         initialData={profile}
-        userId={user.uid}
         onSave={handleSave}
         onCancel={() => setModalVisible(false)}
       />

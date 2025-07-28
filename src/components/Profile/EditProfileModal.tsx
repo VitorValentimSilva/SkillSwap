@@ -17,14 +17,12 @@ import { pickImage } from "../../utils/pickImage";
 import { PhoneNumberInput } from "../Form/PhoneNumberInput";
 import { Ionicons } from "@expo/vector-icons";
 import { colors } from "../../styles/colors";
-import { isUserNameTaken } from "../../hooks/useUserProfile";
 
 interface EditProfileModalProps {
   visible: boolean;
   initialData: ProfileFormData;
   onSave: (data: ProfileFormData) => Promise<void>;
   onCancel: () => void;
-  userId: string;
 }
 
 export default function EditProfileModal({
@@ -32,25 +30,10 @@ export default function EditProfileModal({
   initialData,
   onSave,
   onCancel,
-  userId,
 }: EditProfileModalProps) {
   const { isDark } = useContext(ThemeContext);
   const [photoUri, setPhotoUri] = useState<string>(initialData.photo);
   const [isSaving, setIsSaving] = useState(false);
-  const [userNameTaken, setUserNameTaken] = useState(false);
-
-  const checkUserName = async (userName: string) => {
-    if (userName.length < 6) return;
-    const exists = await isUserNameTaken(userName, userId);
-
-    setUserNameTaken(exists);
-    if (exists) {
-      methods.setError("userName", {
-        type: "manual",
-        message: "Este nome de usuário já está em uso",
-      });
-    }
-  };
 
   const methods = useForm<ProfileFormData>({
     resolver: zodResolver(profileSchema),
@@ -135,21 +118,6 @@ export default function EditProfileModal({
                   </Text>
                 )}
               </View>
-
-              <Input
-                name="userName"
-                label="Nome de Usuário *"
-                placeholder="Digite seu nome de usuário"
-                onBlur={async (e) => {
-                  const value = e.nativeEvent.text.trim();
-                  await checkUserName(value);
-                }}
-              />
-              {userNameTaken && (
-                <Text className="text-ErrorColor mt-1">
-                  Este nome de usuário já está em uso
-                </Text>
-              )}
 
               <Input
                 name="fullName"
