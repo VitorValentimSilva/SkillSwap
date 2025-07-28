@@ -9,7 +9,10 @@ import {
 } from "firebase/firestore";
 import { db } from "../services/firebaseConfig";
 
-export function useUserProfile(uid: string | null | undefined) {
+export function useUserProfile(
+  uid: string | null | undefined,
+  reloadTrigger?: any
+) {
   const [profile, setProfile] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
@@ -39,7 +42,7 @@ export function useUserProfile(uid: string | null | undefined) {
     }
 
     fetchProfile();
-  }, [uid]);
+  }, [uid, reloadTrigger]);
 
   return { profile, loading };
 }

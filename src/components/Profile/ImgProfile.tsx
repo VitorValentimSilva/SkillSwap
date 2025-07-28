@@ -6,7 +6,6 @@ import {
   Alert,
 } from "react-native";
 import { useAuth } from "../../contexts/AuthContext";
-import { useUserProfile } from "../../hooks/useUserProfile";
 import { ThemeContext } from "../../contexts/ThemeContext";
 import { useContext, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
@@ -14,9 +13,18 @@ import EditProfileModal from "./EditProfileModal";
 import { updateProfile } from "../../services/profileService";
 import { ProfileFormData } from "../../schemas/profileSchema";
 
-export default function ImgProfile() {
+interface ImgProfileProps {
+  profile: ProfileFormData | null;
+  loading: boolean;
+  onReload: () => void;
+}
+
+export default function ImgProfile({
+  profile,
+  loading,
+  onReload,
+}: ImgProfileProps) {
   const { user } = useAuth();
-  const { profile, loading } = useUserProfile(user?.uid);
   const { isDark } = useContext(ThemeContext);
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -35,6 +43,7 @@ export default function ImgProfile() {
 
     try {
       await updateProfile(user.uid, updatedData);
+      onReload();
     } catch (e) {
       console.error("Erro ao salvar perfil:", e);
       Alert.alert(

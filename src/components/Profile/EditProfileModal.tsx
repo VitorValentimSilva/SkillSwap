@@ -14,7 +14,6 @@ import { ThemeContext } from "../../contexts/ThemeContext";
 import { ProfileFormData, profileSchema } from "../../schemas/profileSchema";
 import Input from "../Form/Input";
 import { pickImage } from "../../utils/pickImage";
-import { PhoneNumberInput } from "../Form/PhoneNumberInput";
 import { Ionicons } from "@expo/vector-icons";
 import { colors } from "../../styles/colors";
 
@@ -51,9 +50,7 @@ export default function EditProfileModal({
   useEffect(() => {
     reset(initialData);
     setPhotoUri(initialData.photo);
-
-    setValue("phone", initialData.phone, { shouldValidate: true });
-  }, [initialData, reset, setValue]);
+  }, [initialData, reset]);
 
   const handlePickPhoto = async () => {
     const uri = await pickImage();
@@ -125,8 +122,6 @@ export default function EditProfileModal({
                 placeholder="Digite seu nome"
               />
 
-              <PhoneNumberInput name="phone" label="Telefone *" />
-
               <Input
                 name="address"
                 label="Endereço *"
@@ -175,7 +170,11 @@ export default function EditProfileModal({
                 ${isDark ? "bg-SurfaceColorDarkTheme" : "bg-SurfaceColorLightTheme"}`}
             >
               <TouchableOpacity
-                onPress={onCancel}
+                onPress={() => {
+                  reset(initialData);
+                  setPhotoUri(initialData.photo);
+                  onCancel();
+                }}
                 className="px-4 py-2 rounded-full border"
                 style={{
                   borderColor: isDark

@@ -1,14 +1,19 @@
 import { View, Text, ActivityIndicator } from "react-native";
-import { useAuth } from "../../contexts/AuthContext";
-import { useUserProfile } from "../../hooks/useUserProfile";
 import { Ionicons } from "@expo/vector-icons";
 import { useContext } from "react";
 import { ThemeContext } from "../../contexts/ThemeContext";
 import { colors } from "../../styles/colors";
+import { ProfileFormData } from "../../schemas/profileSchema";
 
-export default function InitialInformation() {
-  const { user } = useAuth();
-  const { profile, loading } = useUserProfile(user?.uid);
+interface InitialInformationProps {
+  profile: ProfileFormData | null;
+  loading: boolean;
+}
+
+export default function InitialInformation({
+  profile,
+  loading,
+}: InitialInformationProps) {
   const { isDark } = useContext(ThemeContext);
 
   if (loading) {
