@@ -10,6 +10,7 @@ import AllSkillsModal from "../components/Profile/Skill/AllSkillsModal";
 import HomeTitle from "../components/Home/HomeTitle";
 import { useAuth } from "../contexts/AuthContext";
 import { useUserProfile } from "../hooks/useUserProfile";
+import FieldSocialNetworks from "../components/Profile/FieldSocialNetworks";
 
 export default function Profile() {
   const { isDark } = useContext(ThemeContext);
@@ -43,6 +44,8 @@ export default function Profile() {
           />
 
           <InitialInformation profile={profile} loading={loading} />
+
+          <FieldSocialNetworks />
         </View>
 
         <View className="pt-5">
