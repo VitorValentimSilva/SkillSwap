@@ -7,13 +7,15 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Image,
+  ImageBackground,
+  Dimensions,
 } from "react-native";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ThemeContext } from "../../contexts/ThemeContext";
 import { ProfileFormData, profileSchema } from "../../schemas/profileSchema";
 import Input from "../Form/Input";
-import { pickImage } from "../../utils/pickImage";
+import { pickBackgroundImage, pickImage } from "../../utils/pickImage";
 import { Ionicons } from "@expo/vector-icons";
 import { colors } from "../../styles/colors";
 
@@ -32,7 +34,11 @@ export default function EditProfileModal({
 }: EditProfileModalProps) {
   const { isDark } = useContext(ThemeContext);
   const [photoUri, setPhotoUri] = useState<string>(initialData.photo);
+  const [backgroundImg, setBackgroundImg] = useState<string>(
+    initialData.backgroundImage ?? ""
+  );
   const [isSaving, setIsSaving] = useState(false);
+  const SCREEN_WIDTH = Dimensions.get("window").width;
 
   const methods = useForm<ProfileFormData>({
     resolver: zodResolver(profileSchema),
@@ -50,6 +56,7 @@ export default function EditProfileModal({
   useEffect(() => {
     reset(initialData);
     setPhotoUri(initialData.photo);
+    setBackgroundImg(initialData.backgroundImage ?? "");
   }, [initialData, reset]);
 
   const handlePickPhoto = async () => {
@@ -57,6 +64,14 @@ export default function EditProfileModal({
     if (uri) {
       setPhotoUri(uri);
       setValue("photo", uri, { shouldValidate: true });
+    }
+  };
+
+  const handlePickBackground = async () => {
+    const uri = await pickBackgroundImage();
+    if (uri) {
+      setBackgroundImg(uri);
+      setValue("backgroundImage", uri, { shouldValidate: true });
     }
   };
 
@@ -163,6 +178,44 @@ export default function EditProfileModal({
                 label="X (Twitter)"
                 placeholder="Digite seu arroba do Instagram"
               />
+
+              <Text
+                className={`font-semibold mb-2 ${isDark ? "text-TextPrimaryColorDarkTheme" : "text-TextPrimaryColorLightTheme"}`}
+              >
+                Imagem de Fundo
+              </Text>
+              <View className="items-center mb-4">
+                {backgroundImg ? (
+                  <TouchableOpacity onPress={handlePickBackground}>
+                    <ImageBackground
+                      source={{ uri: backgroundImg }}
+                      style={{
+                        width: SCREEN_WIDTH - 32,
+                        height: 200,
+                        borderRadius: 12,
+                        overflow: "hidden",
+                      }}
+                      resizeMode="cover"
+                    >
+                      <View className="absolute bottom-2 right-2 bg-black bg-opacity-30 rounded-full p-1">
+                        <Ionicons name="camera" size={20} color="#fff" />
+                      </View>
+                    </ImageBackground>
+                  </TouchableOpacity>
+                ) : (
+                  <TouchableOpacity
+                    onPress={handlePickBackground}
+                    className="bg-blue-500 p-3 rounded-full"
+                  >
+                    <Ionicons name="camera" size={24} color="#fff" />
+                  </TouchableOpacity>
+                )}
+                {errors.backgroundImage && (
+                  <Text className="text-ErrorColor mt-2">
+                    {errors.backgroundImage.message}
+                  </Text>
+                )}
+              </View>
             </ScrollView>
 
             <View

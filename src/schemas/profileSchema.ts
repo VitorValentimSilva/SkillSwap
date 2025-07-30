@@ -25,6 +25,10 @@ export const profileSchema = z.object({
   gitHub: z.string().optional(),
   linkedin: z.string().optional(),
   twitter: z.string().optional(),
+  backgroundImage: z
+    .string()
+    .url("Selecione uma imagem de fundo válida")
+    .optional(),
 });
 
 export type ProfileFormData = z.infer<typeof profileSchema>;

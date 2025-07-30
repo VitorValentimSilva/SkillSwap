@@ -31,7 +31,7 @@ export default function Profile() {
         contentContainerStyle={{ paddingBottom: 60 }}
         showsVerticalScrollIndicator={false}
       >
-        <TopScreen />
+        <TopScreen profile={profile} loading={loading} />
 
         <View
           className={`w-full rounded-t-[35px] pt-4 mt-[-60px] 
