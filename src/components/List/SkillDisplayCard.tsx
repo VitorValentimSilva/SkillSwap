@@ -4,15 +4,7 @@ import { ThemeContext } from "../../contexts/ThemeContext";
 import ListButton from "./ListButton";
 import { Skill } from "../../types/skill";
 
-export default function SkillDisplayCard({
-  title,
-  category,
-  level,
-  method,
-  description,
-  hourlyRate,
-  daysAvailable,
-}: Skill) {
+export default function SkillDisplayCard(skill: Skill) {
   const { isDark } = useContext(ThemeContext);
 
   return (
@@ -25,13 +17,13 @@ export default function SkillDisplayCard({
           className={`text-xl font-bold flex-1
             ${isDark ? "text-TextPrimaryColorDarkTheme" : "text-TextPrimaryColorLightTheme"}`}
         >
-          {title}
+          {skill.title}
         </Text>
         <Text
           className={`font-bold text-xl
             ${isDark ? "text-PrimaryColorDarkTheme" : "text-PrimaryColorLightTheme"}`}
         >
-          R${hourlyRate}/h
+          R${skill.hourlyRate}/h
         </Text>
       </View>
 
@@ -44,7 +36,7 @@ export default function SkillDisplayCard({
             className={`text-sm
             ${isDark ? "text-SurfaceColorDarkTheme" : "text-SurfaceColorLightTheme"}`}
           >
-            {category}
+            {skill.category}
           </Text>
         </View>
         <View
@@ -55,7 +47,7 @@ export default function SkillDisplayCard({
             className={`text-sm
             ${isDark ? "text-SurfaceColorDarkTheme" : "text-SurfaceColorLightTheme"}`}
           >
-            {level}
+            {skill.level}
           </Text>
         </View>
         <View
@@ -66,7 +58,7 @@ export default function SkillDisplayCard({
             className={`text-sm
             ${isDark ? "text-SurfaceColorDarkTheme" : "text-SurfaceColorLightTheme"}`}
           >
-            {method}
+            {skill.method}
           </Text>
         </View>
       </View>
@@ -75,7 +67,7 @@ export default function SkillDisplayCard({
         className={`text-sm mb-4
         ${isDark ? "text-TextPrimaryColorDarkTheme" : "text-TextPrimaryColorLightTheme"}`}
       >
-        {description}
+        {skill.description}
       </Text>
 
       <View className="mb-4">
@@ -90,7 +82,7 @@ export default function SkillDisplayCard({
           showsHorizontalScrollIndicator={false}
           className="space-x-2"
         >
-          {daysAvailable.map((day) => (
+          {skill.daysAvailable.map((day) => (
             <View
               key={day}
               className={`px-3 py-1 rounded-full mr-3
@@ -107,7 +99,7 @@ export default function SkillDisplayCard({
         </ScrollView>
       </View>
 
-      <ListButton />
+      <ListButton skill={skill} />
     </View>
   );
 }
