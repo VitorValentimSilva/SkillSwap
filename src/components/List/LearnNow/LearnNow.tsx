@@ -5,6 +5,7 @@ import StepOneLearnNow from "./StepOneLearnNow";
 import { ThemeContext } from "../../../contexts/ThemeContext";
 import { colors } from "../../../styles/colors";
 import { Skill } from "../../../types/skill";
+import StepTwoLearnNow from "./StepTwoLearnNow";
 
 interface LearnNowProps {
   visible: boolean;
@@ -50,6 +51,13 @@ export default function LearnNow({ visible, onClose, skill }: LearnNowProps) {
 
         <View className="flex-1">
           {step === 1 && <StepOneLearnNow onNext={handleNext} skill={skill} />}
+          {step === 2 && (
+            <StepTwoLearnNow
+              onNext={handleNext}
+              onBack={() => setStep(1)}
+              skill={skill}
+            />
+          )}
         </View>
       </View>
     </Modal>
