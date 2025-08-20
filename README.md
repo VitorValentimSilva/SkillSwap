@@ -5,7 +5,7 @@
 ## Demonstração / Screenshots
 
 ```md
-![Home](/assets/home.png)
+![Home](https://raw.githubusercontent.com/VitorValentimSilva/SkillSwap/master/assets/home.png)
 ![Listagem](/assets/listagem.png)
 ![Filtros](/assets/filtros.png)
 ![Perfil](/assets/perfil.png)
@@ -47,3 +47,4 @@ Para testar no celular de outra pessoa ou para instruir alguém a testar:
 2. Inicie o projeto localmente com npm run start (abre o Expo Dev Tools).
 3. No painel do Expo será exibido um QR code.
 4. Abra o Expo Go no celular e use a opção de escanear QR code — o app será carregado diretamente no dispositivo.
+
