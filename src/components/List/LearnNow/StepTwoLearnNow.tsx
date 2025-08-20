@@ -1,5 +1,5 @@
-import React, { useContext, useMemo, useState } from "react";
-import { View, Text, ScrollView } from "react-native";
+import React, { useContext, useMemo } from "react";
+import { View, Text, ScrollView, Alert } from "react-native";
 import { useDateRange } from "../../../hooks/useDateRange";
 import {
   formatDate,
@@ -12,20 +12,24 @@ import ActionButtons from "./ActionButtons";
 import { Skill } from "../../../types/skill";
 import { ThemeContext } from "../../../contexts/ThemeContext";
 
-interface StepTwoLearnNowrops {
-  onNext: () => void;
+interface StepTwoLearnNowProps {
   onBack: () => void;
   skill: Skill;
+  selectedDate: Date | null;
+  setSelectedDate: (d: Date | null) => void;
+  selectedTime: string | null;
+  setSelectedTime: (t: string | null) => void;
 }
 
 export default function StepTwoLearnNow({
-  onNext,
   onBack,
   skill,
-}: StepTwoLearnNowrops) {
+  selectedDate,
+  setSelectedDate,
+  selectedTime,
+  setSelectedTime,
+}: StepTwoLearnNowProps) {
   const { isDark } = useContext(ThemeContext);
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-  const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const { monthCells } = useDateRange({
     start: new Date(),
     monthsAhead: 1,
@@ -91,7 +95,16 @@ export default function StepTwoLearnNow({
         )}
       </ScrollView>
 
-      <ActionButtons onBack={onBack} onNext={onNext} canProceed={canProceed} />
+      <ActionButtons
+        onBack={onBack}
+        onNext={() => {
+          Alert.alert(
+            "Agendamento realizado!",
+            "Sua sessão foi marcada com sucesso."
+          );
+        }}
+        canProceed={canProceed}
+      />
     </View>
   );
 }

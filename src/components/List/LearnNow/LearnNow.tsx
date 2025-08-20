@@ -2,10 +2,10 @@ import React, { useContext, useEffect, useState } from "react";
 import { Modal, View, TouchableOpacity, Text } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import StepOneLearnNow from "./StepOneLearnNow";
+import StepTwoLearnNow from "./StepTwoLearnNow";
 import { ThemeContext } from "../../../contexts/ThemeContext";
 import { colors } from "../../../styles/colors";
 import { Skill } from "../../../types/skill";
-import StepTwoLearnNow from "./StepTwoLearnNow";
 
 interface LearnNowProps {
   visible: boolean;
@@ -17,9 +17,16 @@ export default function LearnNow({ visible, onClose, skill }: LearnNowProps) {
   const { isDark } = useContext(ThemeContext);
   const TOTAL_STEPS = 4;
   const [step, setStep] = useState(1);
+  const [selectedSession, setSelectedSession] = useState<
+    "single" | "package" | null
+  >(null);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [selectedTime, setSelectedTime] = useState<string | null>(null);
 
   useEffect(() => {
-    if (visible) setStep(1);
+    if (visible) {
+      setStep(1);
+    }
   }, [visible]);
 
   const handleNext = () => {
@@ -50,12 +57,23 @@ export default function LearnNow({ visible, onClose, skill }: LearnNowProps) {
         </View>
 
         <View className="flex-1">
-          {step === 1 && <StepOneLearnNow onNext={handleNext} skill={skill} />}
+          {step === 1 && (
+            <StepOneLearnNow
+              onNext={handleNext}
+              skill={skill}
+              selected={selectedSession}
+              setSelected={setSelectedSession}
+            />
+          )}
+
           {step === 2 && (
             <StepTwoLearnNow
-              onNext={handleNext}
               onBack={() => setStep(1)}
               skill={skill}
+              selectedDate={selectedDate}
+              setSelectedDate={setSelectedDate}
+              selectedTime={selectedTime}
+              setSelectedTime={setSelectedTime}
             />
           )}
         </View>

@@ -36,7 +36,7 @@ export default function ActionButtons({ onBack, onNext, canProceed }: Props) {
           className={`text-lg font-semibold text-center 
           ${isDark ? "text-TextPrimaryColorDarkTheme" : "text-TextPrimaryColorLightTheme"}`}
         >
-          Avançar
+          Finalizar
         </Text>
       </TouchableOpacity>
     </View>

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import OptionCard from "./OptionCard";
 import { ThemeContext } from "../../../contexts/ThemeContext";
@@ -7,14 +7,17 @@ import { Skill } from "../../../types/skill";
 interface StepOneLearnNowProps {
   onNext: () => void;
   skill: Skill;
+  selected: "single" | "package" | null;
+  setSelected: (s: "single" | "package" | null) => void;
 }
 
 export default function StepOneLearnNow({
   onNext,
   skill,
+  selected,
+  setSelected,
 }: StepOneLearnNowProps) {
   const { isDark } = useContext(ThemeContext);
-  const [selected, setSelected] = useState<"single" | "package" | null>(null);
 
   return (
     <View className="flex-1 pb-8">
